@@ -44,7 +44,7 @@ async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Fo
     return result_dict
 
 @app.post("/lev2_assessment")
-async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Form(...)):
+async def transcribe_audio(audio_file: UploadFile=File(...)):
     try:
         content = await audio_file.read()
         with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3',mode='wb') as aud:
@@ -52,6 +52,7 @@ async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Fo
         speechfile = wav_converter(aud.name)
         stt_result = clova_stt(speechfile)
         result_dict = pronunciation_assessment_from_file(speechfile, stt_result)
+        result_dict["stt_result"] = stt_result
         if(aud.name is not None):
             os.remove(aud.name)
         
