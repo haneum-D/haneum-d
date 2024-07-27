@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_marginTop="50dp"
+        android:layout_width="300dp"
+        android:layout_height="100dp"/>
+
+    <TextView
+        android:id="@+id/textview1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:text="[    ]을 선택하셨군요.\n그럼 학습해볼까요?"
+        android:textSize="23dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textAlignment="center"
+        android:text="본인이 원하는 학습방법에 따라 단계를 선택해보세요.\n한음프렌즈는 순서대로 연습하는 것을 추천해요."
+        android:textSize="15dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="15dp"
+        android:background="#BCBCBC"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:paddingStart="50dp"
+        android:text="1단계. 단어를 연습해요"
+        android:textSize="13dp"
+        android:textColor="#00B2DB"/>
+
+    <Button
+        android:id="@+id/step1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="10dp"
+        android:text="연습해요"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:background="@drawable/step_rec"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:paddingStart="50dp"
+        android:text="2단계. 학습한 단어를 적용한 문장을 말해봐요."
+        android:textSize="13dp"
+        android:textColor="#00B2DB"/>
+
+    <Button
+        android:id="@+id/step2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="10dp"
+        android:text="적용해요"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:background="@drawable/step_rec"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:paddingStart="50dp"
+        android:text="3단계. 연습한 문장을 스스로 말해봐요."
+        android:textSize="13dp"
+        android:textColor="#00B2DB"/>
+
+    <Button
+        android:id="@+id/step3"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="10dp"
+        android:text="대화해요"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:background="@drawable/step_rec"/>
+
+</LinearLayout>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/result_sheet"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:background="#B9EABB"
+    android:elevation="10dp"
+    android:gravity="center"
+    app:behavior_peekHeight="0dp"
+    app:behavior_hideable="true"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/sheet_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:text="☑   test"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:textColor="#FFFFFF" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="50dp">
+            <Button
+                android:id="@+id/b_next"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:text="다음 문제로 넘어가기"
+                android:textColor="#52CED6"
+                android:textStyle="bold"
+                android:visibility="visible"
+                android:background="@drawable/rec_default"
+                />
+
+            <Button
+                android:id="@+id/b_restart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:text="다시 시도하기"
+                android:visibility="gone"
+
+                />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="30dp">
+            <Button
+                android:id="@+id/l_restart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="100dp"
+                android:layout_marginEnd="100dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:text="다시 시도하기"
+                android:visibility="visible"
+                android:background="#00ff0000"
+                />
+
+            <Button
+                android:id="@+id/l_next"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="100dp"
+                android:layout_marginEnd="100dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:text="다음 문제로 넘어가기"
+                android:visibility="gone"
+                android:background="#00ff0000"
+
+                />
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>
+
+<!--app:behavior_peekHeight="150dp"
+    android:paddingBottom="10dp" -->
