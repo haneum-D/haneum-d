@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         l_temp = findViewById(R.id.temp);
 
         t_temp = l_temp.findViewById(R.id.situation_text);
-        t_temp.setText("추후 추가 예정");
+        t_temp.setText("추후\n추가 예정");
         t_temp.setTextColor(Color.rgb(128,128,128));
 
 
