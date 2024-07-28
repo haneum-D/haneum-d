@@ -54,6 +54,26 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
                 String sen = resultList.get(i).getWordsScore(0).getWord();
                 String type = resultList.get(i).getWordsScore(0).getType();
                 one_senten.setText(sen);
+
+                if(type.equals("None")){
+                    type = "잘했어요! 문제가 없어요";
+                }else if(type.equals("Omission")){
+                    type = "소리를 빼먹었어요";
+                }else if(type.equals("Insertion")){
+                    type = "소리를 더 넣었어요";
+                }else if(type.equals("Mispronunciation")){
+                    type = "소리를 잘 못 말했어요.";
+                }else if(type.equals("UnexpectiedBraak") || type.equals("Unexpectied Braak") ){
+                    type = "중간에 말을 멈췄어요";
+
+                }else if(type.equals("MissingBreak") || type.equals("Missing Break") ){
+                    type = "쉬지 않고 계속 말했어요.";
+
+                }else if(type.equals("Monotone")){
+                    type = "악센트를 더 줘야 해요.";
+
+                }
+
                 one_type.setText(type);
             }else if(stepNum.equals("2")){
                 String type = Integer.toString((int)Math.floor(resultList.get(i).getTotal_score().getPron_score()));
