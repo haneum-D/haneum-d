@@ -61,7 +61,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="0.1"
-                    android:src="@drawable/temp_img" />
+                    android:src="@drawable/cha5" />
                 <TextView
                     android:id="@+id/sentence_q"
                     android:layout_width="0dp"
@@ -74,9 +74,9 @@
                 <ImageView
                     android:id="@+id/audio_start"
                     android:layout_width="0dp"
-                    android:layout_height="34dp"
+                    android:layout_height="40dp"
                     android:layout_weight="0.1"
-                    android:src="@drawable/temp_img"
+                    android:src="@drawable/audio_start"
                     android:visibility="visible" />
 
             </LinearLayout>
@@ -98,7 +98,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="0.1"
-                    android:src="@drawable/temp_img" />
+                    android:src="@drawable/cha4" />
                 <TextView
                     android:id="@+id/sentence"
                     android:layout_width="0dp"
@@ -158,14 +158,14 @@
                     android:id="@+id/record_start"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/temp_img"
+                    android:src="@drawable/record_start"
                     android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/record_stop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/temp_img"
+                    android:src="@drawable/record_stop"
                     android:visibility="gone"
 
                     />
@@ -191,7 +191,7 @@
                 android:id="@+id/record_play"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@drawable/temp_img" />
+                android:src="@drawable/record_play" />
 
         </LinearLayout>
     </LinearLayout>

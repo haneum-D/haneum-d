@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation1.setOnTouchListener(this);
 
         situ1_text = situation1.findViewById(R.id.situation_text);
-        situ1_text.setText("의학\n용어");
+        situ1_text.setText("병원\n접수");
 
 
         /* ----------------------------------------------------*/
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation2.setOnTouchListener(this);
 
         situ2_text = situation2.findViewById(R.id.situation_text);
-        situ2_text.setText("질병\n증상");
+        situ2_text.setText("의료\n절차");
 
         /* ----------------------------------------------------*/
         situation3 = findViewById(R.id.situation3);
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation3.setOnTouchListener(this);
 
         situ3_text = situation3.findViewById(R.id.situation_text);
-        situ3_text.setText("의료\n절차");
+        situ3_text.setText("환자\n지원");
 
         /* ----------------------------------------------------*/
         situation4 = findViewById(R.id.situation4);
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation4.setOnTouchListener(this);
 
         situ4_text = situation4.findViewById(R.id.situation_text);
-        situ4_text.setText("응급\n상황");
+        situ4_text.setText("질병\n증상");
 
         /* ----------------------------------------------------*/
         situation5 = findViewById(R.id.situation5);
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation5.setOnTouchListener(this);
 
         situ5_text = situation5.findViewById(R.id.situation_text);
-        situ5_text.setText("환자\n지원");
+        situ5_text.setText("의료\n정보");
 
         /* ----------------------------------------------------*/
         l_temp = findViewById(R.id.temp);
@@ -123,15 +123,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String situ_string = null;
         if (v == situation1){
-            situ_string = "의학용어";
+            situ_string = "병원접수";
         }else if (v == situation2){
-            situ_string = "질병증상";
-        }else if (v == situation3){
             situ_string = "의료절차";
-        }else if (v == situation4){
-            situ_string = "응급상황";
-        }else if (v == situation5){
+        }else if (v == situation3){
             situ_string = "환자지원";
+        }else if (v == situation4){
+            situ_string = "질병증상";
+        }else if (v == situation5){
+            situ_string = "의료정보";
         }
 
         if(situ_string != null) {

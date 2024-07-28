@@ -85,35 +85,35 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
 
         situation_content = new ArrayList<>();
 
-        if (getSituation.equals("의학용어")) { // 병원 상황 & 진료 화제일 경우
+        if (getSituation.equals("병원접수")) { // 병원 상황 & 진료 화제일 경우
             situation_content.add(new StepOneTwo_Class("3", "1,1,1", "접수처", "1_1_0_audio.mp3", filepath + "/1_1_1_record", "병원에 도착하면 어디로 가야 하나요?"));
             situation_content.add(new StepOneTwo_Class("3", "1,2,1", "오후 2시", "1_2_0_audio.mp3", filepath + "/1_2_1_record", "병원 예약 시간이 몇 시 인가요?"));
             situation_content.add(new StepOneTwo_Class("3", "1,3,1", "2층", "1_3_0_audio.mp3", filepath + "/1_3_1_record", "진료실 위치는 어디인가요?"));
             situation_content.add(new StepOneTwo_Class("3", "1,4,1", "접수처", "1_4_0_audio.mp3", filepath + "/1_4_1_record", "진료 접수를 하려면 어디로 가야하나요?"));
             situation_content.add(new StepOneTwo_Class("3", "1,5,1", "담당 의사, 김박사님", "1_5_0_audio.mp3", filepath + "/1_5_1_record", "담당 의사는 누구인가요?"));
 
-        }else if (getSituation.equals("질병증상")) { // 병원 상황 & 진료 화제일 경우
+        }else if (getSituation.equals("의료절차")) { // 병원 상황 & 진료 화제일 경우
             situation_content.add(new StepOneTwo_Class("3", "2,1,1", "30분", "2_1_0_audio.mp3", filepath + "/2_1_1_record", "진료 시간은 얼마나 걸리나요?"));
             situation_content.add(new StepOneTwo_Class("3", "2,2,1", "약물 치료, 물리 치료", "2_2_0_audio.mp3", filepath + "/2_2_1_record", "치료 방법에는 어떤 방법이 있나요?"));
             situation_content.add(new StepOneTwo_Class("3", "2,3,1", "주 3회", "2_3_0_audio.mp3", filepath + "/2_3_1_record", "치료 일정은 어떻게 진행되나요?"));
             situation_content.add(new StepOneTwo_Class("3", "2,4,1", "드물지만, 있을 수 있음", "2_4_0_audio.mp3", filepath + "/2_4_1_record","치료 후 부작용이 있을까요?"));
             situation_content.add(new StepOneTwo_Class("3", "2,5,1", "다음 주", "2_5_0_audio.mp3", filepath + "/2_5_1_record","치료 결과를 언제 알 수 있을까요?"));
 
-        }else if (getSituation.equals("의료절차")) { // 병원 상황 & 진료 화제일 경우
+        }else if (getSituation.equals("환자지원")) { // 병원 상황 & 진료 화제일 경우
             situation_content.add(new StepOneTwo_Class("3", "3,1,1", "접수처 안내", "3_1_0_audio.mp3", filepath + "/3_1_1_record", "입원 절차는 어떻게 진행되나요?"));
             situation_content.add(new StepOneTwo_Class("3", "3,2,1", "3층", "3_2_0_audio.mp3", filepath + "/3_2_1_record", "병실 위치가 어디인가요?"));
             situation_content.add(new StepOneTwo_Class("3", "3,3,1", "오후 2시, 4시까지", "3_3_0_audio.mp3", filepath + "/3_3_1_record", "면회 시간은 언제인가요?"));
             situation_content.add(new StepOneTwo_Class("3", "3,4,1", "다음 주, 월요일", "3_4_0_audio.mp3", filepath + "/3_4_1_record", "재활 치료 시작 시기는 언제인가요?"));
             situation_content.add(new StepOneTwo_Class("3", "3,5,1", "다음 달", "3_5_0_audio.mp3", filepath + "/3_5_1_record", "재방문 일정은 언제인가요?"));
 
-        }else if (getSituation.equals("응급상황")) { // 병원 상황 & 진료 화제일 경우
+        }else if (getSituation.equals("질병증상")) { // 병원 상황 & 진료 화제일 경우
             situation_content.add(new StepOneTwo_Class("3", "4,1,1", "기침, 콧물", "4_1_0_audio.mp3", filepath + "/4_1_1_record", "감기 증상이 있나요?"));
             situation_content.add(new StepOneTwo_Class("3", "4,2,1", "하루 세 번, 식후 30분", "4_2_0_audio.mp3", filepath + "/4_2_1_record", "감기약 복용 방법에 대해 말씀해주세요."));
             situation_content.add(new StepOneTwo_Class("3", "4,3,1", "지난 가을", "4_3_0_audio.mp3", filepath + "/4_3_1_record", "독감 예방 접종을 받았나요?"));
             situation_content.add(new StepOneTwo_Class("3", "4,4,1", "열, 몸살", "4_4_0_audio.mp3", filepath + "/4_4_1_record", "증상이 어떤 가요?"));
             situation_content.add(new StepOneTwo_Class("3", "4,5,1", "매일, 아침", "4_5_0_audio.mp3", filepath + "/4_5_1_record", "고혈압 약을 복용하고 있나요?"));
 
-        }else if (getSituation.equals("환자지원")) { // 병원 상황 & 진료 화제일 경우
+        }else if (getSituation.equals("의료정보")) { // 병원 상황 & 진료 화제일 경우
             situation_content.add(new StepOneTwo_Class("3", "5,1,1", "운동, 저염식", "5_1_0_audio.mp3", filepath + "/5_1_1_record", "고혈압 관리 방법에 대해 알려주세요."));
             situation_content.add(new StepOneTwo_Class("3", "5,2,1", "2년 전", "5_2_0_audio.mp3", filepath + "/5_2_1_record", "환자가 당뇨 진단을 받았나요?"));
             situation_content.add(new StepOneTwo_Class("3", "5,3,1", "혈당 측정, 식단 조절", "5_3_0_audio.mp3", filepath + "/5_3_1_record0", "당뇨 관리 방법에 대해 말씀해주세요."));
@@ -209,6 +209,8 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void success(Result_Class result) {
 
+                            record_start.setOnClickListener(null);
+
                             result_temp = result;
                             for(int i=0; i < result_temp.getWordsScore_size(); i++){
 
@@ -301,7 +303,7 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
 
             }
         } else if (v == b_next || v == l_next){
-
+            record_start.setOnClickListener(this);
             if ( page < size-1) {
 
                 resultList.add(result_temp);
@@ -337,6 +339,7 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
             }
 
         }else if (v == b_restart || v == l_restart){
+            record_start.setOnClickListener(this);
             behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             record_play.setOnClickListener(null);
 

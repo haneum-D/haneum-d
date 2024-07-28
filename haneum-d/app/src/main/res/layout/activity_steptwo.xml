@@ -56,12 +56,18 @@
             android:background="@drawable/rec_default"
             android:gravity="center"
             android:orientation="horizontal">
-
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.1"
+                android:src="@drawable/cha5" />
             <TextView
                 android:id="@+id/sentence_q"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Q : 안녕하세요. 어디가 아프신가요?"
+                android:layout_weight="0.9"
+                android:padding="10dp"
+                android:text="안녕하세요. 어디가 아프신가요?"
                 android:textStyle="bold"
                 android:textSize="17dp" />
 
@@ -79,21 +85,27 @@
             android:background="@drawable/rec_default"
             android:gravity="center"
             android:orientation="horizontal">
-
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.1"
+                android:src="@drawable/cha4" />
             <TextView
                 android:id="@+id/sentence"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
+                android:padding="10dp"
                 android:text="A : 네, 기침과 콧물이 있습니다."
                 android:textSize="17dp" />
 
             <ImageView
                 android:id="@+id/audio_start"
-                android:layout_width="34dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
                 android:layout_height="34dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/temp_img"
+                android:src="@drawable/audio_start"
                 android:visibility="visible" />
 
         </LinearLayout>
@@ -128,14 +140,14 @@
                             android:id="@+id/record_start"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/temp_img"
+                            android:src="@drawable/record_start"
                             android:visibility="visible" />
 
                         <ImageView
                             android:id="@+id/record_stop"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/temp_img"
+                            android:src="@drawable/record_stop"
                             android:visibility="gone"
 
                             />
@@ -161,7 +173,7 @@
                         android:id="@+id/record_play"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:src="@drawable/temp_img" />
+                        android:src="@drawable/record_play" />
 
                 </LinearLayout>
             </LinearLayout>

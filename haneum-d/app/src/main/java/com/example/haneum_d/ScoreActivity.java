@@ -59,6 +59,10 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
                 String type = Integer.toString((int)Math.floor(resultList.get(i).getTotal_score().getPron_score()));
                 one_senten.setText("A"+Integer.toString(i+1));
                 one_type.setText(type);
+            }else if(stepNum.equals("3")){
+                String type = Integer.toString((int)Math.floor(resultList.get(i).getTotal_score().getPron_score()));
+                one_senten.setText("A"+Integer.toString(i+1));
+                one_type.setText(type);
             }
             result_add.addView(temp_result);
 

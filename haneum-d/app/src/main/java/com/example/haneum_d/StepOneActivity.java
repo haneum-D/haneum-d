@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class StepOneActivity extends AppCompatActivity implements View.OnClickListener {
     Activity activity;
@@ -43,6 +44,7 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
     Context context;
     MediaRecorder mediaRecorder;
     TextView sheet_text;
+    ImageView word_img;
     int size;
     int page = 0;
     int lock = 0;
@@ -81,7 +83,7 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
 
         situation_content = new ArrayList<>();
 
-        if (getSituation.equals("의학용어")) { // 병원 상황 & 진료 화제일 경우
+        if (getSituation.equals("병원접수")) { // 병원 상황 & 진료 화제일 경우
             situation_content.add(new StepOneTwo_Class("1", "1,0,0", "병원", "1_0_0_audio.mp3", filepath + "/1_0_0_record"));
             situation_content.add(new StepOneTwo_Class("1", "1,0,1", "도착", "1_0_1_audio.mp3", filepath + "/1_0_1_record"));
             situation_content.add(new StepOneTwo_Class("1", "1,0,2", "환자", "1_0_2_audio.mp3", filepath + "/1_0_2_record"));
@@ -91,7 +93,7 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
             situation_content.add(new StepOneTwo_Class("1", "1,0,6", "담당", "1_0_6_audio.mp3", filepath + "/1_0_6_record"));
             situation_content.add(new StepOneTwo_Class("1", "1,0,7", "접수", "1_0_7_audio.mp3", filepath + "/1_0_7_record"));
             situation_content.add(new StepOneTwo_Class("1", "1,0,8", "의사", "1_0_8_audio.mp3", filepath + "/1_0_8_record"));
-        }else if (getSituation.equals("질병증상")) { // 병원 상황 & 진료 화제일 경우
+        }else if (getSituation.equals("의료절차")) { // 병원 상황 & 진료 화제일 경우
             situation_content.add(new StepOneTwo_Class("1", "2,0,0", "시간", "2_0_0_audio.mp3", filepath + "/2_0_0_record"));
             situation_content.add(new StepOneTwo_Class("1", "2,0,1", "치료", "2_0_1_audio.mp3", filepath + "/2_0_1_record"));
             situation_content.add(new StepOneTwo_Class("1", "2,0,2", "방법", "2_0_2_audio.mp3", filepath + "/2_0_2_record"));
@@ -102,7 +104,7 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
             situation_content.add(new StepOneTwo_Class("1", "2,0,7", "부작용", "2_0_7_audio.mp3", filepath + "/2_0_7_record"));
             situation_content.add(new StepOneTwo_Class("1", "2,0,8", "드물다", "2_0_8_audio.mp3", filepath + "/2_0_8_record"));
             situation_content.add(new StepOneTwo_Class("1", "2,0,9", "결과", "2_0_9_audio.mp3", filepath + "/2_0_9_record"));
-        }else if (getSituation.equals("의료절차")) { // 병원 상황 & 진료 화제일 경우
+        }else if (getSituation.equals("환자지원")) { // 병원 상황 & 진료 화제일 경우
             situation_content.add(new StepOneTwo_Class("1", "3,0,0", "입원", "3_0_0_audio.mp3", filepath + "/3_0_0_record"));
             situation_content.add(new StepOneTwo_Class("1", "3,0,1", "절차", "3_0_1_audio.mp3", filepath + "/3_0_1_record"));
             situation_content.add(new StepOneTwo_Class("1", "3,0,2", "접수", "3_0_2_audio.mp3", filepath + "/3_0_2_record"));
@@ -113,7 +115,7 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
             situation_content.add(new StepOneTwo_Class("1", "3,0,7", "추후", "3_0_7_audio.mp3", filepath + "/3_0_7_record"));
             situation_content.add(new StepOneTwo_Class("1", "3,0,8", "예약", "3_0_8_audio.mp3", filepath + "/3_0_8_record"));
             situation_content.add(new StepOneTwo_Class("1", "3,0,9", "재방문", "3_0_9_audio.mp3", filepath + "/3_0_9_record"));
-        }else if (getSituation.equals("응급상황")) { // 병원 상황 & 진료 화제일 경우
+        }else if (getSituation.equals("질병증상")) { // 병원 상황 & 진료 화제일 경우
             situation_content.add(new StepOneTwo_Class("1", "4,0,0", "감기", "4_0_0_audio.mp3", filepath + "/4_0_0_record"));
             situation_content.add(new StepOneTwo_Class("1", "4,0,1", "증상", "4_0_1_audio.mp3", filepath + "/4_0_1_record"));
             situation_content.add(new StepOneTwo_Class("1", "4,0,2", "기침", "4_0_2_audio.mp3", filepath + "/4_0_2_record"));
@@ -125,7 +127,7 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
             situation_content.add(new StepOneTwo_Class("1", "4,0,8", "몸살", "4_0_8_audio.mp3", filepath + "/4_0_8_record"));
             situation_content.add(new StepOneTwo_Class("1", "4,0,9", "고혈압", "4_0_9_audio.mp3", filepath + "/4_0_9_record"));
             situation_content.add(new StepOneTwo_Class("1", "4,0,10", "복용", "4_0_10_audio.mp3", filepath + "/4_0_10_record"));
-        }else if (getSituation.equals("환자지원")) { // 병원 상황 & 진료 화제일 경우
+        }else if (getSituation.equals("의료정보")) { // 병원 상황 & 진료 화제일 경우
             situation_content.add(new StepOneTwo_Class("1", "5,0,0", "관리", "5_0_0_audio.mp3", filepath + "/5_0_0_record"));
             situation_content.add(new StepOneTwo_Class("1", "5,0,1", "규칙적인", "5_0_1_audio.mp3", filepath + "/5_0_1_record"));
             situation_content.add(new StepOneTwo_Class("1", "5,0,2", "운동", "5_0_2_audio.mp3", filepath + "/5_0_2_record"));
@@ -144,6 +146,46 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
         Log.d("error", "위치 1-2");
         sentence.setText(item.getSentence());
         index_number.setText(Integer.toString(page+1) + "/" + situation_content.size());
+        word_img = findViewById(R.id.word_img);
+
+        if(item.getTextIdx().equals("4,0,0")) {
+            word_img.setImageResource(R.drawable.a0);
+        }else if (item.getTextIdx().equals("4,0,1")) {
+            word_img.setImageResource(R.drawable.a1);
+        }else if(item.getTextIdx().equals("4,0,2")) {
+            word_img.setImageResource(R.drawable.a2);
+        }else if(item.getTextIdx().equals("4,0,3")) {
+            word_img.setImageResource(R.drawable.a3);
+        }else if(item.getTextIdx().equals("4,0,4")) {
+            word_img.setImageResource(R.drawable.a4);
+        }else if(item.getTextIdx().equals("4,0,5")) {
+            word_img.setImageResource(R.drawable.a5);
+        }else if(item.getTextIdx().equals("4,0,6")) {
+            word_img.setImageResource(R.drawable.a6);
+        }else if(item.getTextIdx().equals("4,0,7")) {
+            word_img.setImageResource(R.drawable.a7);
+        }else if(item.getTextIdx().equals("4,0,8")) {
+            word_img.setImageResource(R.drawable.a8);
+        }else if(item.getTextIdx().equals("4,0,9")) {
+            word_img.setImageResource(R.drawable.a9);
+        }else if(item.getTextIdx().equals("4,0,10")) {
+            word_img.setImageResource(R.drawable.a10);
+        }else{
+            Random rand = new Random();
+            int ran = rand.nextInt(5);
+
+            if (ran == 0){
+                word_img.setImageResource(R.drawable.cha2);
+            }else if (ran == 1){
+                word_img.setImageResource(R.drawable.cha3);
+            }if (ran == 2){
+                word_img.setImageResource(R.drawable.cha4);
+            }if (ran == 3){
+                word_img.setImageResource(R.drawable.cha5);
+            }if (ran == 4){
+                word_img.setImageResource(R.drawable.cha5);
+            }
+        }
 
         /* Bottom Sheet */
         View bottomSheet = findViewById(R.id.result_sheet);
@@ -226,6 +268,7 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void success(Result_Class result) {
 
+                            record_start.setOnClickListener(null);
                             result_temp = result;
 
                             int p_score = (int)Math.floor(result.getTotal_score().getPron_score());
@@ -300,7 +343,7 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
             }
         } else if (v == b_next || v == l_next){
             Log.d("error", "5-1");
-
+            record_start.setOnClickListener(this);
             Log.d("size", Integer.toString(size));
             if ( page < size-1) {
                 Log.d("error", "5-2");
@@ -309,6 +352,46 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
                 item = situation_content.get(page);
                 sentence.setText(item.getSentence());
                 index_number.setText(Integer.toString(page+1) + "/" + situation_content.size());
+
+                if(item.getTextIdx().equals("4,0,0")) {
+                    word_img.setImageResource(R.drawable.a0); //0
+                }else if (item.getTextIdx().equals("4,0,1")) {
+                    word_img.setImageResource(R.drawable.a1); //1
+                }else if(item.getTextIdx().equals("4,0,2")) {
+                    word_img.setImageResource(R.drawable.a2);// 2
+                }else if(item.getTextIdx().equals("4,0,3")) {
+                    word_img.setImageResource(R.drawable.a3);// 3
+                }else if(item.getTextIdx().equals("4,0,4")) {
+                    word_img.setImageResource(R.drawable.a4);//4
+                }else if(item.getTextIdx().equals("4,0,5")) {
+                    word_img.setImageResource(R.drawable.a5); // 5
+                }else if(item.getTextIdx().equals("4,0,6")) {
+                    word_img.setImageResource(R.drawable.a6); // 6
+                }else if(item.getTextIdx().equals("4,0,7")) {
+                    word_img.setImageResource(R.drawable.a7); // 7
+                }else if(item.getTextIdx().equals("4,0,8")) {
+                    word_img.setImageResource(R.drawable.a8); // 8
+                }else if(item.getTextIdx().equals("4,0,9")) {
+                    word_img.setImageResource(R.drawable.a9); // 9
+                }else if(item.getTextIdx().equals("4,0,10")) {
+                    word_img.setImageResource(R.drawable.a10); //10
+                }else{
+                    Random rand = new Random();
+                    int ran = rand.nextInt(5);
+
+                    if (ran == 0){
+                        word_img.setImageResource(R.drawable.cha2);
+                    }else if (ran == 1){
+                        word_img.setImageResource(R.drawable.cha3);
+                    }if (ran == 2){
+                        word_img.setImageResource(R.drawable.cha4);
+                    }if (ran == 3){
+                        word_img.setImageResource(R.drawable.cha5);
+                    }if (ran == 4){
+                        word_img.setImageResource(R.drawable.cha5);
+                    }
+                }
+
                 behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
             }else if( page == size-1){
@@ -326,6 +409,7 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
             }
 
         }else if (v == b_restart || v == l_restart){
+            record_start.setOnClickListener(this);
             behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             record_play.setOnClickListener(null);
 

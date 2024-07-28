@@ -37,7 +37,7 @@ public class StepActivity extends AppCompatActivity implements View.OnClickListe
         TextView textview1 = findViewById(R.id.textview1);
         Log.d("situation", getSituation);
 
-        if (getSituation.equals("의학용어") || getSituation.equals("의료절차")) {
+        if (getSituation.equals("병원접수") || getSituation.equals("의료절차") || getSituation.equals("의료정보")) {
 
             text1 = getSituation + "를 선택하셨군요.\n그럼 학습해볼까요?";
             part1 = "학습해볼까요?";
