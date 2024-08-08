@@ -1,16 +1,18 @@
 import os
 import traceback
 import tempfile
-from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
-from fastapi.responses import FileResponse
-from starlette.background import BackgroundTask
 
 from audio_convert import *
 from clova_speech import *
-#from custom_llm_clova import *
 from pronounce_assess import *
 from temp_prompts import *
+
+"""TTS Connection Legacy
+from datetime import datetime
+from fastapi.responses import FileResponse
+from starlette.background import BackgroundTask
+from custom_llm_clova import *"""
 
 app = FastAPI()
 
@@ -30,7 +32,10 @@ async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Fo
         speechfile = wav_converter(aud.name)
         idx = content_idx.split(",")
         if(idx[2] is not None):
-            result_dict = pronunciation_assessment_from_file(speechfile, content_texts['set'+idx[0]][int(idx[1])][int(idx[2])])
+            if(idx[1]=='0'):
+                result_dict = short_pro_assessment(speechfile, content_texts['set'+idx[0]][int(idx[1])][int(idx[2])])
+            else:
+                result_dict = pronunciation_assessment_from_file(speechfile, content_texts['set'+idx[0]][int(idx[1])][int(idx[2])])
         else:
             result_dict = "error occured"
         if(aud.name is not None):
@@ -62,5 +67,3 @@ async def transcribe_audio(audio_file: UploadFile=File(...)):
         print(traceback.format_exc())
         raise HTTPException(status_code=420, detail = text)
     return result_dict
-
-
