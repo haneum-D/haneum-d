@@ -1,3 +1,4 @@
+import os
 import sys
 import json
 import requests
@@ -9,7 +10,7 @@ def clova_stt(audio_path):
 
     url = "	https://clovaspeech-gw.ncloud.com/recog/v1/stt?lang="+ lang
     headers = {
-        "X-CLOVASPEECH-API-KEY": "YOUR CODE",
+        "X-CLOVASPEECH-API-KEY": os.environ["CLOVA_API_KEY"],
         "Content-Type": "application/octet-stream"
     }
 
