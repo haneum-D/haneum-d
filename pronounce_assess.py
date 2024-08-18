@@ -1,8 +1,11 @@
 import os
 import time
-import string
 import json
+import string
+import base64
 import difflib
+import urllib3
+
 import azure.cognitiveservices.speech as speechsdk
 
 def pronunciation_assessment_from_file(audio_path, text_to_read):
@@ -117,6 +120,43 @@ def pronunciation_assessment_from_file(audio_path, text_to_read):
         words_score_list.append(temp_dict)
     return {"status":"ok", "total_score":total_score_dict, "words_score":words_score_list}
 
+def short_pro_assessment(audio_path, text_to_read):
+    openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/PronunciationKor"
+    #"http://aiopen.etri.re.kr:8000/WiseASR/Pronunciation" for Eng
+    accessKey = os.environ["ETRI_API_KEY"]
+    
+    file = open(audio_path, "rb")
+    audio_contents = base64.b64encode(file.read()).decode("utf8")
+    file.close()
+
+    requestJson = {   
+      "argument": {
+          "language_code": "korean", #"english" for Eng
+          "script": text_to_read,
+          "audio": audio_contents
+      }
+    }
+
+    http = urllib3.PoolManager()
+    print("make response...")
+    response = http.request(
+      "POST",
+      openApiURL,
+      headers={"Content-Type": "application/json; charset=UTF-8","Authorization": accessKey},
+      body=json.dumps(requestJson)
+    )
+
+    result_dict = {"status":"ok"}
+    if(response.data is not None):
+        temp_res = json.loads(response.data)
+        score = round(float(temp_res['return_object']["score"])*20,1)
+        if(score > 100):
+            score == 100
+        result_dict["recognized"] = temp_res['return_object']["recognized"]
+        result_dict["score"] = score
+    return result_dict
+
+
 
 if __name__ == '__main__':
-    a = pronunciation_assessment_from_file("./sample1.wav","코가 막히고 목이 따끔거리고 기침이 나요")
+    a = short_pro_assessment("./oo.wav", "병원")
