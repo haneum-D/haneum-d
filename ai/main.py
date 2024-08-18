@@ -32,6 +32,7 @@ async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Fo
         speechfile = wav_converter(aud.name)
         idx = content_idx.split(",")
         if(idx[2] is not None):
+            print(idx[2])
             if(idx[1]=='0'):
                 result_dict = short_pro_assessment(speechfile, content_texts['set'+idx[0]][int(idx[1])][int(idx[2])])
             else:

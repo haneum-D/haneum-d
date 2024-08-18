@@ -145,14 +145,15 @@ def short_pro_assessment(audio_path, text_to_read):
       headers={"Content-Type": "application/json; charset=UTF-8","Authorization": accessKey},
       body=json.dumps(requestJson)
     )
-    temp_res = json.loads(response.data)
-    
+
     result_dict = {"status":"ok"}
-    score = round(float(temp_res['return_object']["score"])*20,1)
-    if(score > 100):
-        score == 100
-    result_dict["recognized"] = temp_res['return_object']["recognized"]
-    result_dict["score"] = score
+    if(response.data is not None):
+        temp_res = json.loads(response.data)
+        score = round(float(temp_res['return_object']["score"])*20,1)
+        if(score > 100):
+            score == 100
+        result_dict["recognized"] = temp_res['return_object']["recognized"]
+        result_dict["score"] = score
     return result_dict
 
 
