@@ -24,6 +24,6 @@ def clova_stt(audio_path):
         return "error"
 
 if __name__ == '__main__':
-    testpath = './sample1.wav'
+    testpath = './1sample.wav'
     res= clova_stt(testpath)
     print(res)

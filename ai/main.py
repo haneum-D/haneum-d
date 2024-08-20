@@ -32,7 +32,6 @@ async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Fo
         speechfile = wav_converter(aud.name)
         idx = content_idx.split(",")
         if(idx[2] is not None):
-            print(idx[2])
             if(idx[1]=='0'):
                 result_dict = short_pro_assessment(speechfile, content_texts['set'+idx[0]][int(idx[1])][int(idx[2])])
             else:
@@ -50,15 +49,28 @@ async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Fo
     return result_dict
 
 @app.post("/lev2_assessment")
-async def transcribe_audio(audio_file: UploadFile=File(...)):
+async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Form(...)):
     try:
         content = await audio_file.read()
         with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3',mode='wb') as aud:
             aud.write(content)
         speechfile = wav_converter(aud.name)
-        stt_result = clova_stt(speechfile)
-        result_dict = pronunciation_assessment_from_file(speechfile, stt_result)
-        result_dict["stt_result"] = stt_result
+        idx = content_idx.split(",")
+        if(idx[1] is not None):
+            stt_result = clova_stt(speechfile)
+            for keyword in keyword_texts['set'+idx[0]][int(idx[1])]:
+                print(keyword)
+                if(keyword not in stt_result):
+                    result_dict = {}
+                    result_dict["status"] = "ok"
+                    result_dict["total_score"] = 0
+                    result_dict["keyword"] = "notin"
+                    return result_dict
+            result_dict = pronunciation_assessment_from_file(speechfile, stt_result)
+            result_dict["stt_result"] = stt_result
+            result_dict["keyword"] = "in"
+        else:
+            result_dict = "error occured"
         if(aud.name is not None):
             os.remove(aud.name)
         
