@@ -58,17 +58,37 @@ async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Fo
         idx = content_idx.split(",")
         if(idx[1] is not None):
             stt_result = clova_stt(speechfile)
-            for keyword in keyword_texts['set'+idx[0]][int(idx[1])]:
-                print(keyword)
-                if(keyword not in stt_result):
-                    result_dict = {}
-                    result_dict["status"] = "ok"
-                    result_dict["total_score"] = 0
-                    result_dict["keyword"] = "notin"
-                    return result_dict
-            result_dict = pronunciation_assessment_from_file(speechfile, stt_result)
-            result_dict["stt_result"] = stt_result
-            result_dict["keyword"] = "in"
+            if(content_idx in number_issue_idx):
+                keyword_2nd_check = False
+                for keyword in keyword_texts['set'+idx[0]][int(idx[1])][0]:
+                    print(keyword)
+                    if(keyword not in stt_result):
+                        keyword_2nd_check = True
+                        break
+                if(keyword_2nd_check):
+                    for keyword in keyword_texts['set'+idx[0]][int(idx[1])][1]:
+                        print(keyword)
+                        if(keyword not in stt_result):
+                            result_dict = {}
+                            result_dict["status"] = "ok"
+                            result_dict["total_score"] = 0
+                            result_dict["keyword"] = "notin"
+                            return result_dict
+                result_dict = pronunciation_assessment_from_file(speechfile, stt_result)
+                result_dict["stt_result"] = stt_result
+                result_dict["keyword"] = "in"
+            else:
+                for keyword in keyword_texts['set'+idx[0]][int(idx[1])]:
+                    print(keyword)
+                    if(keyword not in stt_result):
+                        result_dict = {}
+                        result_dict["status"] = "ok"
+                        result_dict["total_score"] = 0
+                        result_dict["keyword"] = "notin"
+                        return result_dict
+                result_dict = pronunciation_assessment_from_file(speechfile, stt_result)
+                result_dict["stt_result"] = stt_result
+                result_dict["keyword"] = "in"
         else:
             result_dict = "error occured"
         if(aud.name is not None):
