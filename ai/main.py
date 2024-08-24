@@ -48,6 +48,19 @@ async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Fo
         raise HTTPException(status_code=420, detail = text)
     return result_dict
 
+def keyword_notin():
+    total_score={}
+    total_score["pron_score"]=0
+    total_score["accuracy_score"]=0
+    total_score["completeness_score"]=0
+    total_score["fluency_score"]=0
+    result_dict = {}
+    result_dict["status"] = "ok"
+    result_dict["total_score"] = total_score
+    result_dict["keyword"] = "notin"
+    return result_dict
+    
+
 @app.post("/lev2_assessment")
 async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Form(...)):
     try:
@@ -69,10 +82,7 @@ async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Fo
                     for keyword in keyword_texts['set'+idx[0]][int(idx[1])][1]:
                         print(keyword)
                         if(keyword not in stt_result):
-                            result_dict = {}
-                            result_dict["status"] = "ok"
-                            result_dict["total_score"] = 0
-                            result_dict["keyword"] = "notin"
+                            result_dict = keyword_notin()
                             return result_dict
                 result_dict = pronunciation_assessment_from_file(speechfile, stt_result)
                 result_dict["stt_result"] = stt_result
@@ -81,10 +91,7 @@ async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: str=Fo
                 for keyword in keyword_texts['set'+idx[0]][int(idx[1])]:
                     print(keyword)
                     if(keyword not in stt_result):
-                        result_dict = {}
-                        result_dict["status"] = "ok"
-                        result_dict["total_score"] = 0
-                        result_dict["keyword"] = "notin"
+                        result_dict = keyword_notin()
                         return result_dict
                 result_dict = pronunciation_assessment_from_file(speechfile, stt_result)
                 result_dict["stt_result"] = stt_result
