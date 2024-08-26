@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class ScoreActivity extends AppCompatActivity implements View.OnClickListener {
-    String getSituation;
+    String getSituation, getChapter;
     ArrayList<Result_Class> resultList;
     Button backMenu;
     String stepNum;
@@ -25,7 +25,10 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_score);
 
         getSituation = getIntent().getStringExtra("situation");
+        getChapter = getIntent().getStringExtra("chapter");
+
         stepNum = getIntent().getStringExtra("stepNum");
+
         resultList = new ArrayList<Result_Class>();
         resultList = (ArrayList<Result_Class>) getIntent().getSerializableExtra("resultList");
 
@@ -45,16 +48,34 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
         backMenu.setOnClickListener(this);
 
         for(int i = 0; i < size; i++){
-            temp_result = layoutInflater.inflate(R.layout.layout_one_score, null, false);
-
-            TextView one_senten = temp_result.findViewById(R.id.one_senten);
-            TextView one_type = temp_result.findViewById(R.id.one_type);
 
             if(stepNum.equals("1")) {
-                String sen = resultList.get(i).getWordsScore(0).getWord();
-                String type = resultList.get(i).getWordsScore(0).getType();
+
+                temp_result = layoutInflater.inflate(R.layout.layout_one_score, null, false);
+
+                TextView one_num = temp_result.findViewById(R.id.one_num);
+                TextView one_senten = temp_result.findViewById(R.id.one_senten);
+                TextView one_score = temp_result.findViewById(R.id.one_score);
+
+
+                one_num.setText("W_"+ Integer.toString(i+1));
+
+                String sen = resultList.get(i).getRecognized();
+
+                Log.d("여기서 오류나요", sen);
                 one_senten.setText(sen);
 
+                double d_score = Double.parseDouble(resultList.get(i).getScore());
+
+                int i_score = (int) Math.floor(d_score);
+
+                one_score.setText(Integer.toString(i_score));
+
+                result_add.addView(temp_result);
+
+
+                pron_score_sum = pron_score_sum + i_score;
+                /*
                 if(type.equals("None")){
                     type = "잘했어요! 문제가 없어요";
                 }else if(type.equals("Omission")){
@@ -72,37 +93,83 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
                 }else if(type.equals("Monotone")){
                     type = "악센트를 더 줘야 해요.";
 
-                }
+                } */
+                Log.d("여기서 오류나요", "오류위치8");
 
-                one_type.setText(type);
             }else if(stepNum.equals("2")){
-                String type = Integer.toString((int)Math.floor(resultList.get(i).getTotal_score().getPron_score()));
-                one_senten.setText("A"+Integer.toString(i+1));
-                one_type.setText(type);
-            }else if(stepNum.equals("3")){
-                String type = Integer.toString((int)Math.floor(resultList.get(i).getTotal_score().getPron_score()));
-                one_senten.setText("A"+Integer.toString(i+1));
-                one_type.setText(type);
-            }
-            result_add.addView(temp_result);
+                temp_result = layoutInflater.inflate(R.layout.layout_two_score, null, false);
 
-            pron_score_sum = pron_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getPron_score());
-            accuracy_score_sum = accuracy_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getAccuracy_score());
-            completeness_score_sum = completeness_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getCompleteness_score());
-            fluency_score_sum = fluency_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getFluency_score());
+                TextView two_num = temp_result.findViewById(R.id.two_num);
+                TextView two_senten = temp_result.findViewById(R.id.two_senten);
+                TextView two_score = temp_result.findViewById(R.id.two_score);
+
+                two_num.setText("A_"+Integer.toString(i+1));
+
+                String temp_senten = "";
+                int word_size = resultList.get(i).getWordsScore_size();
+
+                for(int j = 0; j < word_size; j++){
+                    temp_senten = temp_senten + resultList.get(i).getWordsScore(j).getWord();
+                }
+                two_senten.setText(temp_senten);
+
+                String score = Integer.toString((int)Math.floor(resultList.get(i).getTotal_score().getPron_score()));
+
+                two_score.setText(score);
+                result_add.addView(temp_result);
+
+                pron_score_sum = pron_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getPron_score());
+                accuracy_score_sum = accuracy_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getAccuracy_score());
+                completeness_score_sum = completeness_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getCompleteness_score());
+                fluency_score_sum = fluency_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getFluency_score());
+
+            }else if(stepNum.equals("3")){
+                temp_result = layoutInflater.inflate(R.layout.layout_two_score, null, false);
+
+                TextView two_num = temp_result.findViewById(R.id.two_num);
+                TextView two_senten = temp_result.findViewById(R.id.two_senten);
+                TextView two_score = temp_result.findViewById(R.id.two_score);
+
+                two_num.setText("A_"+Integer.toString(i+1));
+
+                String temp_senten = "";
+                int word_size = resultList.get(i).getWordsScore_size();
+
+                for(int j = 0; j < word_size; j++){
+                    temp_senten = temp_senten + resultList.get(i).getWordsScore(j).getWord();
+                }
+                two_senten.setText(temp_senten);
+
+                String score = Integer.toString((int)Math.floor(resultList.get(i).getTotal_score().getPron_score()));
+
+                two_score.setText(score);
+                result_add.addView(temp_result);
+
+                pron_score_sum = pron_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getPron_score());
+                accuracy_score_sum = accuracy_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getAccuracy_score());
+                completeness_score_sum = completeness_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getCompleteness_score());
+                fluency_score_sum = fluency_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getFluency_score());
+            }
+
+
         }
 
         TextView pron_score = findViewById(R.id.fin_score);
-        TextView accu_score = findViewById(R.id.accu);
-        TextView comple_score = findViewById(R.id.comple);
-        TextView flu_score = findViewById(R.id.flu);
-
         pron_score.setText(Integer.toString((int) Math.floor(pron_score_sum/size)));
-        accu_score.setText(Integer.toString((int) Math.floor(accuracy_score_sum/size)));
-        comple_score.setText(Integer.toString((int) Math.floor(completeness_score_sum/size)));
-        flu_score.setText(Integer.toString((int) Math.floor(fluency_score_sum/size)));
 
+        if(stepNum.equals("2") || stepNum.equals("3")) {
+            LinearLayout score_layout = findViewById(R.id.score_layout);
+            score_layout.setVisibility(View.VISIBLE);
 
+            TextView accu_score = findViewById(R.id.accu);
+            TextView comple_score = findViewById(R.id.comple);
+            TextView flu_score = findViewById(R.id.flu);
+
+            accu_score.setText(Integer.toString((int) Math.floor(accuracy_score_sum/size)));
+            comple_score.setText(Integer.toString((int) Math.floor(completeness_score_sum/size)));
+            flu_score.setText(Integer.toString((int) Math.floor(fluency_score_sum/size)));
+        }
+        
     }
 
     @Override

@@ -1,13 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Haneumd" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Status Bar -->
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:statusBarColor">@color/white</item>
 
-        <!-- Navigation Bar -->
+
+
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:navigationBarColor">@color/white</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+
 
         <item name="colorControlHighlight">#00B2DB</item>
     </style>
@@ -15,3 +18,6 @@
     <style name="Theme.Haneumd" parent="Base.Theme.Haneumd" />
 
 </resources>
+
+<!-- <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item> -->

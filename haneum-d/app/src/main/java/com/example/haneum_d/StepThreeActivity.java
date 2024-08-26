@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -36,7 +38,7 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
     ArrayList<Result_Class> resultList;
     Result_Class result_temp;
     String filepath;
-    String getSituation;
+    String getSituation, getChapter;
     ImageView record_start, record_stop, audio_start, record_play;
     StepOneTwo_Class item;
     String recordFile;
@@ -56,7 +58,7 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_stepthree);
 
         getSituation = getIntent().getStringExtra("situation");
-
+        getChapter = getIntent().getStringExtra("chapter");
         resultList = new ArrayList<>();
         result_temp = new Result_Class();
 
@@ -84,50 +86,27 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
         result_add = findViewById(R.id.result_add); // scroll View
 
         situation_content = new ArrayList<>();
+        //situation_content.add(new StepOneTwo_Class("3", "1,1,1", "접수처", "1_1_0_audio.mp3", filepath + "/1_1_1_record", "병원에 도착하면 어디로 가야 하나요?"));
+        DBHelper dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        if (getSituation.equals("병원접수")) { // 병원 상황 & 진료 화제일 경우
-            situation_content.add(new StepOneTwo_Class("3", "1,1,1", "접수처", "1_1_0_audio.mp3", filepath + "/1_1_1_record", "병원에 도착하면 어디로 가야 하나요?"));
-            situation_content.add(new StepOneTwo_Class("3", "1,2,1", "오후 2시", "1_2_0_audio.mp3", filepath + "/1_2_1_record", "병원 예약 시간이 몇 시 인가요?"));
-            situation_content.add(new StepOneTwo_Class("3", "1,3,1", "2층", "1_3_0_audio.mp3", filepath + "/1_3_1_record", "진료실 위치는 어디인가요?"));
-            situation_content.add(new StepOneTwo_Class("3", "1,4,1", "접수처", "1_4_0_audio.mp3", filepath + "/1_4_1_record", "진료 접수를 하려면 어디로 가야하나요?"));
-            situation_content.add(new StepOneTwo_Class("3", "1,5,1", "담당 의사, 김박사님", "1_5_0_audio.mp3", filepath + "/1_5_1_record", "담당 의사는 누구인가요?"));
+        //ID , TOPIC , CHAPTER , STEP_NUM, TEXT_IDX , SENTENCE_A, AUDIOFILE_STR, RECORDFILE_STR, SENTENCE_Q, SUB_TOPIC, KEYWWORD_IDX
 
-        }else if (getSituation.equals("의료절차")) { // 병원 상황 & 진료 화제일 경우
-            situation_content.add(new StepOneTwo_Class("3", "2,1,1", "30분", "2_1_0_audio.mp3", filepath + "/2_1_1_record", "진료 시간은 얼마나 걸리나요?"));
-            situation_content.add(new StepOneTwo_Class("3", "2,2,1", "약물 치료, 물리 치료", "2_2_0_audio.mp3", filepath + "/2_2_1_record", "치료 방법에는 어떤 방법이 있나요?"));
-            situation_content.add(new StepOneTwo_Class("3", "2,3,1", "주 3회", "2_3_0_audio.mp3", filepath + "/2_3_1_record", "치료 일정은 어떻게 진행되나요?"));
-            situation_content.add(new StepOneTwo_Class("3", "2,4,1", "드물지만, 있을 수 있음", "2_4_0_audio.mp3", filepath + "/2_4_1_record","치료 후 부작용이 있을까요?"));
-            situation_content.add(new StepOneTwo_Class("3", "2,5,1", "다음 주", "2_5_0_audio.mp3", filepath + "/2_5_1_record","치료 결과를 언제 알 수 있을까요?"));
-
-        }else if (getSituation.equals("환자지원")) { // 병원 상황 & 진료 화제일 경우
-            situation_content.add(new StepOneTwo_Class("3", "3,1,1", "접수처 안내", "3_1_0_audio.mp3", filepath + "/3_1_1_record", "입원 절차는 어떻게 진행되나요?"));
-            situation_content.add(new StepOneTwo_Class("3", "3,2,1", "3층", "3_2_0_audio.mp3", filepath + "/3_2_1_record", "병실 위치가 어디인가요?"));
-            situation_content.add(new StepOneTwo_Class("3", "3,3,1", "오후 2시, 4시까지", "3_3_0_audio.mp3", filepath + "/3_3_1_record", "면회 시간은 언제인가요?"));
-            situation_content.add(new StepOneTwo_Class("3", "3,4,1", "다음 주, 월요일", "3_4_0_audio.mp3", filepath + "/3_4_1_record", "재활 치료 시작 시기는 언제인가요?"));
-            situation_content.add(new StepOneTwo_Class("3", "3,5,1", "다음 달", "3_5_0_audio.mp3", filepath + "/3_5_1_record", "재방문 일정은 언제인가요?"));
-
-        }else if (getSituation.equals("질병증상")) { // 병원 상황 & 진료 화제일 경우
-            situation_content.add(new StepOneTwo_Class("3", "4,1,1", "기침, 콧물", "4_1_0_audio.mp3", filepath + "/4_1_1_record", "감기 증상이 있나요?"));
-            situation_content.add(new StepOneTwo_Class("3", "4,2,1", "하루 세 번, 식후 30분", "4_2_0_audio.mp3", filepath + "/4_2_1_record", "감기약 복용 방법에 대해 말씀해주세요."));
-            situation_content.add(new StepOneTwo_Class("3", "4,3,1", "지난 가을", "4_3_0_audio.mp3", filepath + "/4_3_1_record", "독감 예방 접종을 받았나요?"));
-            situation_content.add(new StepOneTwo_Class("3", "4,4,1", "열, 몸살", "4_4_0_audio.mp3", filepath + "/4_4_1_record", "증상이 어떤 가요?"));
-            situation_content.add(new StepOneTwo_Class("3", "4,5,1", "매일, 아침", "4_5_0_audio.mp3", filepath + "/4_5_1_record", "고혈압 약을 복용하고 있나요?"));
-
-        }else if (getSituation.equals("의료정보")) { // 병원 상황 & 진료 화제일 경우
-            situation_content.add(new StepOneTwo_Class("3", "5,1,1", "운동, 저염식", "5_1_0_audio.mp3", filepath + "/5_1_1_record", "고혈압 관리 방법에 대해 알려주세요."));
-            situation_content.add(new StepOneTwo_Class("3", "5,2,1", "2년 전", "5_2_0_audio.mp3", filepath + "/5_2_1_record", "환자가 당뇨 진단을 받았나요?"));
-            situation_content.add(new StepOneTwo_Class("3", "5,3,1", "혈당 측정, 식단 조절", "5_3_0_audio.mp3", filepath + "/5_3_1_record0", "당뇨 관리 방법에 대해 말씀해주세요."));
-            situation_content.add(new StepOneTwo_Class("3", "5,4,1", "숨이 참, 기침", "5_4_0_audio.mp3", filepath + "/5_4_1_record", "환자의 증상을 설명해주시겠어요?"));
-            situation_content.add(new StepOneTwo_Class("3", "5,5,1", "꽃가루, 먼지", "5_5_0_audio.mp3", filepath + "/5_5_1_record", "알레르기 증상이 있나요?"));
-
+        Cursor cursor = db.rawQuery("SELECT * FROM contents WHERE topic = ? AND chapter = ? AND step_num = ?",new String [] {getSituation,getChapter,"3"});
+        while (cursor.moveToNext()){
+            Log.d("keword_idx", cursor.getString(10));
+            situation_content.add(new StepOneTwo_Class(cursor.getString(3), cursor.getString(4), cursor.getString(5),
+                    cursor.getString(6), filepath + cursor.getString(7), cursor.getString(8), cursor.getString(10)));
+            Log.d("오류위치", "herererere");
         }
 
         size = situation_content.size();
 
         item = situation_content.get(page);
 
-        sentence.setText(item.getSentence());
-        sentence_q.setText(item.getSenten_q());
+
+        sentence.setText(item.getSentenceA());
+        sentence_q.setText(item.getSentenceQ());
 
         index_number.setText(Integer.toString(page+1) + "/" + situation_content.size());
 
@@ -149,8 +128,6 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
         l_restart.setOnClickListener(this);
         l_next = bottomSheet.findViewById(R.id.l_next);
         l_next.setOnClickListener(this);
-
-
 
     }
 
@@ -178,7 +155,8 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
                 mediaRecorder = new MediaRecorder();
                 mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                 mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-                mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+                mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+                mediaRecorder.setAudioSamplingRate(16000);
                 mediaRecorder.setOutputFile(recordFile);
 
                 try{
@@ -203,8 +181,8 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
                     File file = new File(recordFile);
 
                     API_Connect api_connect = new API_Connect();
-
-                    api_connect.connect(context, "2", file, item.getTextIdx(), new Result_Interface() {
+                    Log.d("여기에서 오류가 날까요..", item.getKeywordIdx());
+                    api_connect.connect(context, "2", file, item.getKeywordIdx(), new Result_Interface() {
 
                         @Override
                         public void success(Result_Class result) {
@@ -212,28 +190,36 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
                             record_start.setOnClickListener(null);
 
                             result_temp = result;
-                            for(int i=0; i < result_temp.getWordsScore_size(); i++){
 
-                                LayoutInflater layoutInflater = LayoutInflater.from(context);
-                                temp = layoutInflater.inflate(R.layout.layout_three_score, null, false);
+                            if (result_temp.getKeyword().equals("in")) {
+                                for (int i = 0; i < result_temp.getWordsScore_size(); i++) {
 
-                                TextView word = temp.findViewById(R.id.word);
-                                TextView score = temp.findViewById(R.id.score);
-                                TextView type = temp.findViewById(R.id.type);
+                                    LayoutInflater layoutInflater = LayoutInflater.from(context);
+                                    temp = layoutInflater.inflate(R.layout.layout_three_score, null, false);
 
-                                String www = result_temp.getWordsScore(i).getWord();
-                                int sss = (int)Math.floor(result_temp.getWordsScore(i).getScore());
-                                String ttt = result_temp.getWordsScore(i).getType();
 
-                                word.setText(www);
-                                score.setText(Integer.toString(sss));
-                                type.setText(ttt);
+                                    TextView score = temp.findViewById(R.id.score);
+                                    TextView type = temp.findViewById(R.id.type);
 
-                                result_add.addView(temp);
+                                    int sss = (int) Math.floor(result_temp.getWordsScore(i).getScore());
+                                    String ttt = result_temp.getWordsScore(i).getType();
+
+                                    score.setText(Integer.toString(sss));
+                                    type.setText(ttt);
+
+                                    TextView word = temp.findViewById(R.id.word);
+                                    String www = result_temp.getWordsScore(i).getWord();
+                                    word.setText(www);
+
+
+                                    result_add.addView(temp);
+                                }
                             }
 
+                            String keyword = result.getKeyword();
+
                             int p_score = (int) Math.floor(result.getTotal_score().getPron_score());
-                            if (p_score >= 70) {
+                            if (p_score >= 70 && keyword.equals("in")) {
                                 new ResultBottomSheet(behavior, activity);
                                 sheet_text.setText("☑   훌륭해요 !");
                                 result_sheet.setBackgroundColor(Color.rgb(82, 206, 214));
@@ -245,7 +231,7 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
                                 l_next.setVisibility(View.GONE);
 
 
-                            }else if ( p_score <70 && p_score >=40){
+                            }else if ( p_score <70 && p_score >=40 && keyword.equals("in")){
                                 sheet_text.setText("☑   다시 시도해볼까요?");
                                 result_sheet.setBackgroundColor(Color.rgb(255, 187, 40));
                                 b_next.setVisibility(View.GONE); // 다음 문제로 넘어가기
@@ -254,7 +240,7 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
                                 l_next.setVisibility(View.VISIBLE);
                                 new ResultBottomSheet(behavior, activity);
 
-                            }else if ( p_score < 40){
+                            }else if ( p_score < 40 || keyword.equals("notin")){
                                 sheet_text.setText("☑   아쉬워요!");
                                 result_sheet.setBackgroundColor(Color.rgb(245, 95, 95));
                                 b_next.setVisibility(View.GONE); // 다음 문제로 넘어가기
@@ -309,8 +295,8 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
                 resultList.add(result_temp);
                 page++;
                 item = situation_content.get(page);
-                sentence.setText(item.getSentence());
-                sentence_q.setText(item.getSenten_q());
+                sentence.setText(item.getSentenceA());
+                sentence_q.setText(item.getSentenceQ());
 
                 index_number.setText(Integer.toString(page+1) + "/" + situation_content.size());
 
@@ -333,7 +319,8 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
                 Log.d("error", "here");
                 Intent intent = new Intent(getApplicationContext(), ScoreActivity.class);
                 intent.putExtra("situation", getSituation);
-                intent.putExtra("stepNum","2");
+                intent.putExtra("chapter",getChapter);
+                intent.putExtra("stepNum","3");
                 intent.putExtra("resultList", resultList);
                 startActivity(intent);
             }

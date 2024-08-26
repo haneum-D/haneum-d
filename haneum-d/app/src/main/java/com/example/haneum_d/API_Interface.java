@@ -22,7 +22,8 @@ public interface API_Interface {
 
     @Multipart
     @POST("/lev2_assessment")Call<Result_Class> lev2_start(
-            @Part MultipartBody.Part audio_file
+            @Part MultipartBody.Part audio_file,
+            @Part ("content_idx") RequestBody content_idx
     );
 
 }

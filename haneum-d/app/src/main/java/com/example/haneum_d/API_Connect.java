@@ -54,7 +54,7 @@ public class API_Connect {
                 }
             });
         } else if (api_ver == "2") { // Step3
-            api_interface.lev2_start(recordFile).enqueue(new Callback<Result_Class>() {
+            api_interface.lev2_start(recordFile, content_idx).enqueue(new Callback<Result_Class>() {
 
                 @Override
                 public void onResponse(Call<Result_Class> call, Response<Result_Class> response) {

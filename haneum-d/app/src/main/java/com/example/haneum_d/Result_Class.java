@@ -11,8 +11,21 @@ public class Result_Class implements Serializable {
     @SerializedName("status")
     private String status;
 
+    /* ------------------------------- */
+    @Expose
+    @SerializedName("recognized")
+    private String recognized;
+
+    @Expose
+    @SerializedName("score")
+    private String score;
+
+    /* ------------------------------- */
+    @Expose
     @SerializedName("total_score")
     private TotalScore total_score;
+
+    @Expose
     @SerializedName("words_score")
     private ArrayList<WordsScore> words_score;
 
@@ -20,10 +33,25 @@ public class Result_Class implements Serializable {
     @SerializedName("stt_result")
     private String stt_result;
 
+    @Expose
+    @SerializedName("keyword")
+    private String keyword;
 
     public String getStatus(){
         return status;
     }
+
+    /* ------------------------------- */
+
+    public String getRecognized(){
+        return recognized;
+    }
+
+    public String getScore(){
+        return score;
+    }
+
+    /* ------------------------------- */
 
     public TotalScore getTotal_score(){
         return total_score;
@@ -40,7 +68,7 @@ public class Result_Class implements Serializable {
         return stt_result;
     }
 
-
+    public String getKeyword(){return keyword; }
 
 }
 

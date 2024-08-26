@@ -23,7 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 public class StepActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     Button step1, step2, step3;
-    String getSituation;
+    String getSituation, getChapter;
     String text1, part1;
 
     @Override
@@ -32,19 +32,21 @@ public class StepActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_step);
 
         getSituation = getIntent().getStringExtra("situation");
+        getChapter = getIntent().getStringExtra("chapter");
 
         /* 부분 Bold 처리 */
         TextView textview1 = findViewById(R.id.textview1);
         Log.d("situation", getSituation);
 
-        if (getSituation.equals("병원접수") || getSituation.equals("의료절차") || getSituation.equals("의료정보")) {
+        if (getSituation.equals("chapter1")) {
 
-            text1 = getSituation + "를 선택하셨군요.\n그럼 학습해볼까요?";
+            text1 = getSituation + "에서 " + getChapter + "을 선택하셨군요.\n그럼 학습해볼까요?";
             part1 = "학습해볼까요?";
         }else {
-            text1 = getSituation + "을 선택하셨군요.\n그럼 학습해볼까요?";
+            text1 = getSituation + "에서 " + getChapter + "를 선택하셨군요.\n그럼 학습해볼까요?";
             part1 = "학습해볼까요?";
         }
+
         int start = text1.indexOf(part1);
         int end = start + part1.length();
 
@@ -75,14 +77,17 @@ public class StepActivity extends AppCompatActivity implements View.OnClickListe
         if(v == step1){
             Intent intent = new Intent(getApplicationContext(), StepOneActivity.class);
             intent.putExtra("situation", getSituation);
+            intent.putExtra("chapter",getChapter);
             startActivity(intent);
         }else if(v == step2){
             Intent intent = new Intent(getApplicationContext(), StepTwoActivity.class);
             intent.putExtra("situation", getSituation);
+            intent.putExtra("chapter",getChapter);
             startActivity(intent);
         }else if(v == step3){
             Intent intent = new Intent(getApplicationContext(), StepThreeActivity.class);
             intent.putExtra("situation", getSituation);
+            intent.putExtra("chapter",getChapter);
             startActivity(intent);
         }
     }

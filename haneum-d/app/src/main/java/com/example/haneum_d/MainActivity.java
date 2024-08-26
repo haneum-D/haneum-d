@@ -1,9 +1,13 @@
 package com.example.haneum_d;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -13,59 +17,117 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
-    LinearLayout situation1, situation2, situation3, situation4, situation5;
-    TextView situ1_text, situ2_text, situ3_text, situ4_text, situ5_text;
+    LinearLayout situation1, situation2, situation3, situation4, situation5, situation6;
+    TextView situ1_text, situ2_text, situ3_text, situ4_text, situ5_text, situ6_text;
 
-    LinearLayout l_temp;
-    TextView t_temp;
+    DBHelper dbHelper;
+    SQLiteDatabase db_write;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        //EdgeToEdge.enable(this);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+
+        /*
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
+        });*/
 
-        /* 권한 요청 */
-        ActivityCompat.requestPermissions(this , new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO},0);
+        /* DataBase */
+        dbHelper = new DBHelper(this);
+        db_write = dbHelper.getWritableDatabase();
+
+        //TOPIC , CHAPTER , STEP_NUM, TEXT_IDX , SENTENCE_A, AUDIOFILE_STR, RECORDFILE_STR, SENTENCE_Q, SUB_TOPIC, KEYWWORD_IDX
+        // 대학생활, K-문화, K-음식, 지역관광, 취업면접, 병원가기 : chapter1 ~ 4
+
+        // step1 example : "1", "1,0,0", "학교", "1_0_0_audio.wav", filepath + "/1_0_0_record"
+        /*
+        ContentValues values = new ContentValues();
+        values.put(ContentsInfo.COLUMN_TOPIC, "대학생활");
+        values.put(ContentsInfo.COLUMN_CHAPTER, "chapter1");
+        values.put(ContentsInfo.COLUMN_STEP_NUM, "1");
+        values.put(ContentsInfo.COLUMN_TEXT_IDX, "1,0,0");
+        values.put(ContentsInfo.COLUMN_SENTENCE_A, "학교");
+        values.put(ContentsInfo.COLUMN_AUDIOFILE_STR, "1_0_0_audio.mp3");
+        values.put(ContentsInfo.COLUMN_RECORDFILE_STR, "/1_0_0_record");
+        */
+
+        /*
+        values.put(ContentsInfo.COLUMN_TOPIC, "a");
+        values.put(ContentsInfo.COLUMN_CHAPTER, "b");
+        values.put(ContentsInfo.COLUMN_STEP_NUM, "c");
+        values.put(ContentsInfo.COLUMN_TEXT_IDX, "d");
+        values.put(ContentsInfo.COLUMN_SENTENCE_A, "e");
+        values.put(ContentsInfo.COLUMN_AUDIOFILE_STR, "f");
+        values.put(ContentsInfo.COLUMN_RECORDFILE_STR, "g");
+        values.put(ContentsInfo.COLUMN_SENTENCE_Q, "h"); // step2 ~ 3
+        values.put(ContentsInfo.COLUMN_SUB_TOPIC, "i"); // step2 ~ 3
+        values.put(ContentsInfo.COLUMN_KEYWORD_IDX, "j"); // step3
+
+
+        long insertRow = db_write.insert(ContentsInfo.TABLE_NAME, null, values);
+        if(insertRow == -1){
+            Log.d("DB DATA 추가", "X");
+        }else{
+            Log.d("DB DATA 추가", "O");
+        }
+        db_write.close();
+        */
+        /* 권한 요청 */ // Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        ActivityCompat.requestPermissions(this , new String[]{ Manifest.permission.RECORD_AUDIO},0);
 
         /* Toolbar */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled((false));
 
-        /* 부분 Bold 처리 */
-        TextView textview1 = findViewById(R.id.textview1);
-        String text1 = "병원에서의 상황을 선택하여\n한국어를 공부해봅시다.";
-        String part1 = "병원에서의 상황을 선택";
+        Resources resource = getResources();
+        int status_bar_id = 0;
+        int navigation_bar_id = 0;
 
-        int start = text1.indexOf(part1);
-        int end = start + part1.length();
+        int status_bar_h = 0;
+        int navigation_bar_h = 0;
 
-        SpannableString spanString = new SpannableString(text1);
-        spanString.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spanString.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spanString.setSpan(new RelativeSizeSpan(1.0f), start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        textview1.setText(spanString);
+        status_bar_id = resource.getIdentifier("status_bar_height", "dimen", "android");
+        navigation_bar_id = resource.getIdentifier("navigation_bar_height", "dimen", "android");
+
+        if (status_bar_id != 0){
+            status_bar_h = resource.getDimensionPixelSize(status_bar_id);
+        }
+
+        if(navigation_bar_id !=0){
+            navigation_bar_h = resource.getDimensionPixelSize(navigation_bar_id);
+        }
+
+        LinearLayout inner = findViewById(R.id.inner);
+        inner.setPadding(0,
+                status_bar_h,
+                0,
+                navigation_bar_h);
 
         /* 상황 선택 및 Text 설정 */
         situation1 = findViewById(R.id.situation1);
@@ -73,8 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation1.setOnTouchListener(this);
 
         situ1_text = situation1.findViewById(R.id.situation_text);
-        situ1_text.setText("병원\n접수");
-
+        situ1_text.setText("대학\n생활");
 
         /* ----------------------------------------------------*/
         situation2 = findViewById(R.id.situation2);
@@ -82,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation2.setOnTouchListener(this);
 
         situ2_text = situation2.findViewById(R.id.situation_text);
-        situ2_text.setText("의료\n절차");
+        situ2_text.setText("K-문화");
 
         /* ----------------------------------------------------*/
         situation3 = findViewById(R.id.situation3);
@@ -90,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation3.setOnTouchListener(this);
 
         situ3_text = situation3.findViewById(R.id.situation_text);
-        situ3_text.setText("환자\n지원");
+        situ3_text.setText("K-음식");
 
         /* ----------------------------------------------------*/
         situation4 = findViewById(R.id.situation4);
@@ -98,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation4.setOnTouchListener(this);
 
         situ4_text = situation4.findViewById(R.id.situation_text);
-        situ4_text.setText("질병\n증상");
+        situ4_text.setText("지역\n관광");
 
         /* ----------------------------------------------------*/
         situation5 = findViewById(R.id.situation5);
@@ -106,14 +167,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation5.setOnTouchListener(this);
 
         situ5_text = situation5.findViewById(R.id.situation_text);
-        situ5_text.setText("의료\n정보");
+        situ5_text.setText("취업\n면접");
 
         /* ----------------------------------------------------*/
-        l_temp = findViewById(R.id.temp);
+        situation6 = findViewById(R.id.situation6);
+        situation6.setOnClickListener(this);
+        situation6.setOnTouchListener(this);
 
-        t_temp = l_temp.findViewById(R.id.situation_text);
-        t_temp.setText("추후\n추가 예정");
-        t_temp.setTextColor(Color.rgb(128,128,128));
+        situ6_text = situation6.findViewById(R.id.situation_text);
+        situ6_text.setText("병원\n가기");
 
 
     }
@@ -123,19 +185,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String situ_string = null;
         if (v == situation1){
-            situ_string = "병원접수";
+            situ_string = "대학생활";
         }else if (v == situation2){
-            situ_string = "의료절차";
+            situ_string = "K-문화";
         }else if (v == situation3){
-            situ_string = "환자지원";
+            situ_string = "K-음식";
         }else if (v == situation4){
-            situ_string = "질병증상";
+            situ_string = "지역관광";
         }else if (v == situation5){
-            situ_string = "의료정보";
+            situ_string = "취업면접";
+        }else if (v == situation6){
+            situ_string = "병원가기";
         }
 
         if(situ_string != null) {
-            Intent intent = new Intent(getApplicationContext(), StepActivity.class);
+            Intent intent = new Intent(getApplicationContext(), ChapterActivity.class);
             intent.putExtra("situation", situ_string);
             startActivity(intent);
         }
@@ -147,17 +211,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(v == situation1){
             temp_text = situ1_text;
-            Log.d("situ1", "냐셔111");
         }else if(v == situation2){
-
             temp_text = situ2_text;
         }else if(v == situation3){
-
             temp_text = situ3_text;
         }else if(v == situation4){
             temp_text = situ4_text;
         }else if(v == situation5){
             temp_text = situ5_text;
+        }else if(v == situation6){
+            temp_text = situ6_text;
         }
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -171,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 temp_text.setTextColor(Color.rgb(255, 255, 255));
             }
         }
-
 
         return false;
     }

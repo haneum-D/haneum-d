@@ -3,8 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:elevation="5dp"
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
 
@@ -19,9 +17,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/tag_rec"
+            android:padding="10dp"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/toolbarButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/setting"
+                 />
+        </LinearLayout>
 
+    </RelativeLayout>
 </androidx.appcompat.widget.Toolbar>
 
+<!--
+    android:elevation="5dp"
+-->
 
 
 
