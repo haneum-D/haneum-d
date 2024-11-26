@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="70dp"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:src="@drawable/cha1" />
@@ -15,10 +15,10 @@
         android:id="@+id/textview1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="25dp"
         android:textAlignment="center"
         android:text="[    ]을 선택하셨군요.\n그럼 학습해볼까요?"
-        android:textSize="23dp"/>
+        android:textSize="20dp"/>
 
     <TextView
         android:layout_width="match_parent"

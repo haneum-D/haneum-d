@@ -8,8 +8,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-public class ResultBottomSheet {
+public class ResultBottomSheet  {
     public ResultBottomSheet(final BottomSheetBehavior behavior, final Activity activity){
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 

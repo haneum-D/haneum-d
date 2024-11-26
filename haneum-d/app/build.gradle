@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
 }
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
     namespace 'com.example.haneum_d'
@@ -12,10 +14,12 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
-
+        buildConfigField("String", "API_URL", properties['API_URL'])
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    buildFeatures {
+        buildConfig = true
+    }
     buildTypes {
         release {
             minifyEnabled false

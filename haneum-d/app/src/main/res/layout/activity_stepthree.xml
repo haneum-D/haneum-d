@@ -69,6 +69,7 @@
                     android:layout_weight="0.8"
                     android:padding="10dp"
                     android:text="병원에 도착하면\n 어디로 가야하나요?"
+                    android:breakStrategy="balanced"
                     android:textStyle="bold"
                     android:textSize="17dp" />
                 <ImageView
@@ -106,6 +107,7 @@
                     android:layout_weight="0.9"
                     android:textStyle="bold"
                     android:padding="10dp"
+                    android:breakStrategy="balanced"
                     android:text="접수처"
                     android:textSize="17dp" />
 
@@ -152,7 +154,8 @@
 
             <FrameLayout
                 android:layout_width="70dp"
-                android:layout_height="70dp">
+                android:layout_height="70dp"
+                android:layout_marginTop="3dp">
 
                 <ImageView
                     android:id="@+id/record_start"
@@ -191,6 +194,7 @@
                 android:id="@+id/record_play"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
+                android:layout_marginTop="3dp"
                 android:src="@drawable/record_play" />
 
         </LinearLayout>

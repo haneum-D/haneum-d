@@ -1,5 +1,8 @@
 package com.example.haneum_d;
 
+
+import static java.lang.Thread.sleep;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,15 +22,21 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Dimension;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -42,37 +51,34 @@ import java.util.Random;
 
 public class StepOneActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final int[] SAMPLE_RATE_CANDIDATES = new int[]{16000, 11025, 22050, 44100};
-    private static final int CHANNEL = AudioFormat.CHANNEL_IN_MONO;
-    private static final int ENCODING = AudioFormat.ENCODING_PCM_16BIT;
-    private Handler handler = new Handler();
-    byte[] buffer, data;
-    Activity activity;
+
     BottomSheetBehavior behavior;
     Button b_restart, b_next, l_restart, l_next;
+    ImageView record_start, record_stop, audio_start, record_play;
+    ImageView word_img;
     LinearLayout result_sheet;
     TextView index_number, sentence;
+    TextView sheet_text;
+
+
     ArrayList<StepOneTwo_Class> situation_content;
     ArrayList<Result_Class> resultList;
     Result_Class result_temp;
+    StepOneTwo_Class item;
     String filepath;
     String getSituation, getChapter;
-    ImageView record_start, record_stop, audio_start, record_play;
-    StepOneTwo_Class item;
     String recordFile, tempFilepath;
+
+    
+    Activity activity;
     Context context;
     MediaRecorder mediaRecorder;
-    TextView sheet_text;
-    ImageView word_img;
 
-    AudioRecord audioRecord;
-    boolean IsRecording = false;
-    BufferedOutputStream outputStream;
+    TextView t_loading;
+    FrameLayout f_loading;
 
-    BufferedInputStream inputStream;
-    File waveFile, tempFile;
-
-
+    /* AudioRecord를 이용한 .wav 녹음
+    private static final int[] SAMPLE_RATE_CANDIDATES = new int[]{16000, 11025, 22050, 44100};
     private final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     private final int RECORDER_CHANNELS = AudioFormat.CHANNEL_CONFIGURATION_MONO;  //안드로이드 녹음시 채널 상수값
     private final int WAVE_CHANNEL_MONO = 1;  //wav 파일 헤더 생성시 채널 상수값
@@ -82,15 +88,25 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
     private int BUFFER_SIZE = 0;
     private int mAudioLen = 0;
 
+    private Handler handler = new Handler();
+    byte[] buffer, data;
+    AudioRecord audioRecord;
+    boolean IsRecording = false;
+    BufferedOutputStream outputStream;
+    BufferedInputStream inputStream;
+    File waveFile, tempFile;
+    int read = 0;
+    int len = 0;
+    */
+
     int size;
     int page = 0;
     int lock = 0;
 
-    int read = 0;
-    int len = 0;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stepone);
 
@@ -138,7 +154,9 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
         size = situation_content.size();
         item = situation_content.get(page);
         sentence.setText(item.getSentenceA());
+
         index_number.setText(Integer.toString(page + 1) + "/" + situation_content.size());
+
         word_img = findViewById(R.id.word_img);
 
         /* 단어별 이미지
@@ -158,7 +176,7 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
         } else if (ran == 3) {
             word_img.setImageResource(R.drawable.cha5);
         } else if (ran == 4) {
-            word_img.setImageResource(R.drawable.cha5);
+            word_img.setImageResource(R.drawable.cha6);
         }
 
         /* Bottom Sheet */
@@ -169,6 +187,8 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
         result_sheet = bottomSheet.findViewById(R.id.result_sheet);
 
         sheet_text = bottomSheet.findViewById(R.id.sheet_text);
+        t_loading = bottomSheet.findViewById(R.id.t_loading);
+        f_loading = bottomSheet.findViewById(R.id.f_loading);
 
         b_restart = bottomSheet.findViewById(R.id.b_restart);
         b_restart.setOnClickListener(this);
@@ -189,6 +209,24 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
         if (v == audio_start) {
             if (lock == 0) {
                 playAssetSound(context, item.getAudiofile());
+
+                /*
+                    BottomSheetDialog bottmsheet = new BottomSheetDialog(this);
+                    bottmsheet.setContentView(R.layout.layout_result_sheet);
+                    bottmsheet.show();
+                */
+                /*
+                new ResultBottomSheet(behavior, activity);
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    }
+                }, 2000);
+                */
+
+
             }
         } else if (v == record_start) {
             if (lock == 0) {
@@ -202,9 +240,9 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
 
                 Long datetime = System.currentTimeMillis();
                 String time = datetime.toString();
-                recordFile = item.getRecordfile() + time + ".mp3";
-                //recordFile = item.getRecordfile() + time + ".wav";
 
+
+                recordFile = item.getRecordfile() + time + ".mp3";
 
                 mediaRecorder = new MediaRecorder();
                 mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -222,7 +260,7 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
                 }
 
 
-
+                //recordFile = item.getRecordfile() + time + ".wav";
                 /* .wav 로 녹음하기
                 Runnable runnable = new Runnable() {
                     @Override
@@ -258,11 +296,20 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
                 audioRecord.release();
                 audioRecord = null;
                 */
+                new ResultBottomSheet(behavior, activity);
+
+                sheet_text.setText("☑   녹음 된 문장을 확인 중입니다.");
+                sheet_text.setTextSize(Dimension.SP, 19);
+                result_sheet.setBackgroundColor(Color.parseColor("#D9D9D9"));
+
+                f_loading.setVisibility(View.GONE);
+                b_next.setVisibility(View.GONE);
+                b_restart.setVisibility(View.GONE);
+                t_loading.setVisibility(View.VISIBLE);
+                t_loading.setText("잠시만 기다려주세요.");
 
                 record_start.setVisibility(View.VISIBLE);
                 record_stop.setVisibility(View.GONE);
-
-
 
                 if (mediaRecorder != null) {
                     mediaRecorder.stop();
@@ -272,64 +319,76 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
                     File file = new File(recordFile);
 
                     API_Connect api_connect = new API_Connect();
-                    Log.d("file_name", recordFile);
-                    Log.d("item_idx", item.getTextIdx());
+
                     api_connect.connect(context, "1", file, item.getTextIdx(), new Result_Interface() {
 
                         @Override
                         public void success(Result_Class result) {
 
+                            String status = result.getStatus();
+                            Log.d("e_status", status);
+
+                            behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
                             record_start.setOnClickListener(null);
                             result_temp = result;
-                            Log.d("word_score_ss", result.getScore());
-                            Double p_score = Double.parseDouble(result.getScore());
 
-                            //int p_score = (int)Math.floor(Double.parseDouble(result.getScore()));
+                            if(status.equals("ok")) {
 
-                            Log.d("word_score", Double.toString(p_score));
-                            if (p_score >= 55) {
-                                new ResultBottomSheet(behavior, activity);
-                                sheet_text.setText("☑   훌륭해요 !");
-                                result_sheet.setBackgroundColor(Color.rgb(82, 206, 214));
+                                Double p_score = Double.parseDouble(result.getScore());
+                                //int p_score = (int)Math.floor(Double.parseDouble(result.getScore()));
 
-                                b_next.setVisibility(View.VISIBLE); // 다음 문제로 넘어가기
-                                b_restart.setVisibility(View.GONE);
 
-                                l_restart.setVisibility(View.VISIBLE); // 다시 시도하기
-                                l_next.setVisibility(View.GONE);
+                                if (p_score >= 55) {
+                                    new ResultBottomSheet(behavior, activity);
 
-                            } else if (p_score < 55 && p_score >= 40) {
-                                new ResultBottomSheet(behavior, activity);
-                                sheet_text.setText("☑   다시 시도해볼까요?");
-                                result_sheet.setBackgroundColor(Color.rgb(255, 187, 40));
-                                b_next.setVisibility(View.GONE); // 다음 문제로 넘어가기
-                                b_restart.setVisibility(View.VISIBLE);
-                                l_restart.setVisibility(View.GONE); // 다시 시도하기
-                                l_next.setVisibility(View.VISIBLE);
+                                    sheet_text.setText("☑   훌륭해요 !");
+                                    result_sheet.setBackgroundColor(Color.rgb(82, 206, 214));
 
-                            } else if (p_score < 40) {
-                                new ResultBottomSheet(behavior, activity);
-                                sheet_text.setText("☑   아쉬워요!");
-                                result_sheet.setBackgroundColor(Color.rgb(245, 95, 95));
-                                b_next.setVisibility(View.GONE); // 다음 문제로 넘어가기
-                                b_restart.setVisibility(View.VISIBLE);
-                                l_restart.setVisibility(View.GONE); // 다시 시도하기
-                                l_next.setVisibility(View.VISIBLE);
+                                    f_loading.setVisibility(View.VISIBLE);
+                                    b_next.setVisibility(View.VISIBLE); // 다음 문제로 넘어가기
+                                    b_restart.setVisibility(View.GONE);
 
+                                    l_restart.setVisibility(View.VISIBLE); // 다시 시도하기
+                                    l_next.setVisibility(View.GONE);
+
+                                } else if (p_score < 55 && p_score >= 40) {
+                                    new ResultBottomSheet(behavior, activity);
+                                    sheet_text.setText("☑   다시 시도해볼까요?");
+                                    result_sheet.setBackgroundColor(Color.rgb(255, 187, 40));
+                                    f_loading.setVisibility(View.VISIBLE);
+                                    b_next.setVisibility(View.GONE); // 다음 문제로 넘어가기
+                                    b_restart.setVisibility(View.VISIBLE);
+                                    l_restart.setVisibility(View.GONE); // 다시 시도하기
+                                    l_next.setVisibility(View.VISIBLE);
+
+                                } else if (p_score < 40) {
+                                    new ResultBottomSheet(behavior, activity);
+                                    sheet_text.setText("☑   아쉬워요!");
+                                    result_sheet.setBackgroundColor(Color.rgb(245, 95, 95));
+                                    f_loading.setVisibility(View.VISIBLE);
+                                    b_next.setVisibility(View.GONE); // 다음 문제로 넘어가기
+                                    b_restart.setVisibility(View.VISIBLE);
+                                    l_restart.setVisibility(View.GONE); // 다시 시도하기
+                                    l_next.setVisibility(View.VISIBLE);
+
+                                }
+                            }else if(status.equals("error")){
+                                Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                             }
-
                         }
 
                         @Override
                         public void failure(Throwable t) {
-                            // Display error
+                            // connect error
+                            behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                            Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                             Log.d("error", "result_interface error");
                         }
 
                     });
 
                 }
-
 
                 lock = 0;
                 record_play.setOnClickListener(this);
@@ -339,13 +398,10 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
 
             if (lock == 0) {
 
-                //playAssetSound(context, recordFile);
-
                 MediaPlayer mediaPlayer;
                 mediaPlayer = new MediaPlayer();
-                Log.d("play_file_name", recordFile);
-                try {
 
+                try {
                     mediaPlayer
                             .setDataSource(recordFile);
                     mediaPlayer.prepare();
@@ -353,7 +409,6 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
                 }
 
                 mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
                     public void onPrepared(MediaPlayer mp) {
                         mediaPlayer.start();
                     }
@@ -391,28 +446,28 @@ public class StepOneActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (ran == 3) {
                     word_img.setImageResource(R.drawable.cha5);
                 } else if (ran == 4) {
-                    word_img.setImageResource(R.drawable.cha5);
+                    word_img.setImageResource(R.drawable.cha6);
                 }
 
                 behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
             } else if (page == size - 1) {
 
-
                 resultList.add(result_temp);
                 behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
                 // 결과 페이지로 넘어가기
-
                 Intent intent = new Intent(getApplicationContext(), ScoreActivity.class);
                 intent.putExtra("stepNum", "1");
                 intent.putExtra("situation", getSituation);
                 intent.putExtra("chapter", getChapter);
                 intent.putExtra("resultList", resultList);
                 startActivity(intent);
+
             }
 
         } else if (v == b_restart || v == l_restart) {
+
             record_start.setOnClickListener(this);
             behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             record_play.setOnClickListener(null);

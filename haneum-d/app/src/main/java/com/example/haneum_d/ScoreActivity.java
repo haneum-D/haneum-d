@@ -1,11 +1,15 @@
 package com.example.haneum_d;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,9 +22,12 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
     ArrayList<Result_Class> resultList;
     Button backMenu;
     String stepNum;
+    LinearLayout l_score;
+    ImageView i_score;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
 
@@ -29,9 +36,13 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
 
         stepNum = getIntent().getStringExtra("stepNum");
 
+        l_score = findViewById(R.id.l_score);
+        i_score = findViewById(R.id.i_score);
+
         resultList = new ArrayList<Result_Class>();
         resultList = (ArrayList<Result_Class>) getIntent().getSerializableExtra("resultList");
 
+        Log.d("three", "error1");
         int size = resultList.size();
         int pron_score_sum = 0;
         int accuracy_score_sum = 0;
@@ -46,10 +57,13 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
 
         backMenu = findViewById(R.id.backMenu);
         backMenu.setOnClickListener(this);
-
+        Log.d("three", "error2");
         for(int i = 0; i < size; i++){
 
             if(stepNum.equals("1")) {
+
+                l_score.setBackgroundColor(Color.parseColor("#71D3D5"));
+                i_score.setImageResource(R.drawable.cha3);
 
                 temp_result = layoutInflater.inflate(R.layout.layout_one_score, null, false);
 
@@ -62,7 +76,6 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
 
                 String sen = resultList.get(i).getRecognized();
 
-                Log.d("여기서 오류나요", sen);
                 one_senten.setText(sen);
 
                 double d_score = Double.parseDouble(resultList.get(i).getScore());
@@ -75,6 +88,8 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
 
 
                 pron_score_sum = pron_score_sum + i_score;
+
+
                 /*
                 if(type.equals("None")){
                     type = "잘했어요! 문제가 없어요";
@@ -94,9 +109,13 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
                     type = "악센트를 더 줘야 해요.";
 
                 } */
-                Log.d("여기서 오류나요", "오류위치8");
+
+
 
             }else if(stepNum.equals("2")){
+                l_score.setBackgroundColor(Color.parseColor("#FFBB28"));
+                i_score.setImageResource(R.drawable.cha4);
+
                 temp_result = layoutInflater.inflate(R.layout.layout_two_score, null, false);
 
                 TextView two_num = temp_result.findViewById(R.id.two_num);
@@ -109,7 +128,7 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
                 int word_size = resultList.get(i).getWordsScore_size();
 
                 for(int j = 0; j < word_size; j++){
-                    temp_senten = temp_senten + resultList.get(i).getWordsScore(j).getWord();
+                    temp_senten = temp_senten + resultList.get(i).getWordsScore(j).getWord() + " ";
                 }
                 two_senten.setText(temp_senten);
 
@@ -124,6 +143,9 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
                 fluency_score_sum = fluency_score_sum + (int) Math.floor(resultList.get(i).getTotal_score().getFluency_score());
 
             }else if(stepNum.equals("3")){
+                l_score.setBackgroundColor(Color.parseColor("#809BDD"));
+                i_score.setImageResource(R.drawable.cha2);
+
                 temp_result = layoutInflater.inflate(R.layout.layout_two_score, null, false);
 
                 TextView two_num = temp_result.findViewById(R.id.two_num);
@@ -133,15 +155,22 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
                 two_num.setText("A_"+Integer.toString(i+1));
 
                 String temp_senten = "";
-                int word_size = resultList.get(i).getWordsScore_size();
-
-                for(int j = 0; j < word_size; j++){
-                    temp_senten = temp_senten + resultList.get(i).getWordsScore(j).getWord();
+                Log.d("three", "error3");
+                if(resultList.get(i).getKeyword().equals("in")) {
+                    int word_size = resultList.get(i).getWordsScore_size();
+                    Log.d("word_size", Integer.toString(word_size));
+                    Log.d("three", "error4");
+                    for (int j = 0; j < word_size; j++) {
+                        temp_senten = temp_senten + resultList.get(i).getWordsScore(j).getWord();
+                    }
+                    two_senten.setText(temp_senten);
                 }
-                two_senten.setText(temp_senten);
 
                 String score = Integer.toString((int)Math.floor(resultList.get(i).getTotal_score().getPron_score()));
 
+                if (score.equals("0")){
+                    score = "키워드 X";
+                }
                 two_score.setText(score);
                 result_add.addView(temp_result);
 
@@ -155,7 +184,7 @@ public class ScoreActivity extends AppCompatActivity implements View.OnClickList
         }
 
         TextView pron_score = findViewById(R.id.fin_score);
-        pron_score.setText(Integer.toString((int) Math.floor(pron_score_sum/size)));
+        pron_score.setText(Integer.toString((int) Math.floor(pron_score_sum/size)) + "점");
 
         if(stepNum.equals("2") || stepNum.equals("3")) {
             LinearLayout score_layout = findViewById(R.id.score_layout);

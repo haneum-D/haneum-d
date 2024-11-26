@@ -13,11 +13,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Dimension;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -29,31 +33,41 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class StepThreeActivity extends AppCompatActivity implements View.OnClickListener {
-    Activity activity;
-    BottomSheetBehavior behavior;
+
     Button b_restart, b_next, l_restart, l_next;
+    ImageView record_start, record_stop, audio_start, record_play;
     LinearLayout result_sheet;
+    LinearLayout result_add;
     TextView index_number, sentence, sentence_q;
+    TextView sheet_text;
+    View temp;
+
     ArrayList<StepOneTwo_Class> situation_content;
     ArrayList<Result_Class> resultList;
+    StepOneTwo_Class item;
     Result_Class result_temp;
     String filepath;
     String getSituation, getChapter;
-    ImageView record_start, record_stop, audio_start, record_play;
-    StepOneTwo_Class item;
     String recordFile;
+
+
+    Activity activity;
+    BottomSheetBehavior behavior;
     Context context;
     MediaRecorder mediaRecorder;
-    TextView sheet_text;
 
-    LinearLayout result_add;
-    View temp;
 
     int size = 0;
     int page = 0;
     int lock = 0;
+
+    TextView t_loading;
+    FrameLayout f_loading;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stepthree);
 
@@ -64,7 +78,7 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
 
         context = this;
         activity = this;
-        Log.d("hi", "1");
+
         index_number = findViewById(R.id.index_number);
         sentence = findViewById(R.id.sentence);
         sentence_q = findViewById(R.id.sentence_q);
@@ -86,7 +100,7 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
         result_add = findViewById(R.id.result_add); // scroll View
 
         situation_content = new ArrayList<>();
-        //situation_content.add(new StepOneTwo_Class("3", "1,1,1", "접수처", "1_1_0_audio.mp3", filepath + "/1_1_1_record", "병원에 도착하면 어디로 가야 하나요?"));
+
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -94,10 +108,10 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
 
         Cursor cursor = db.rawQuery("SELECT * FROM contents WHERE topic = ? AND chapter = ? AND step_num = ?",new String [] {getSituation,getChapter,"3"});
         while (cursor.moveToNext()){
-            Log.d("keword_idx", cursor.getString(10));
+
             situation_content.add(new StepOneTwo_Class(cursor.getString(3), cursor.getString(4), cursor.getString(5),
                     cursor.getString(6), filepath + cursor.getString(7), cursor.getString(8), cursor.getString(10)));
-            Log.d("오류위치", "herererere");
+
         }
 
         size = situation_content.size();
@@ -118,6 +132,9 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
         result_sheet = bottomSheet.findViewById(R.id.result_sheet);
 
         sheet_text = bottomSheet.findViewById(R.id.sheet_text);
+
+        t_loading = findViewById(R.id.t_loading);
+        f_loading = findViewById(R.id.f_loading);
 
         b_restart = bottomSheet.findViewById(R.id.b_restart);
         b_restart.setOnClickListener(this);
@@ -147,7 +164,6 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
                 record_start.setVisibility(View.GONE);
                 record_stop.setVisibility(View.VISIBLE);
 
-
                 Long datetime = System.currentTimeMillis();
                 String time = datetime.toString();
                 recordFile = item.getRecordfile() + time + ".mp3";
@@ -170,6 +186,17 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
         }else if ( v == record_stop){
             if(lock == 1){
 
+                new ResultBottomSheet(behavior, activity);
+                sheet_text.setText("☑   녹음 된 문장을 확인 중입니다.");
+                sheet_text.setTextSize(Dimension.SP, 19);
+                result_sheet.setBackgroundColor(Color.parseColor("#D9D9D9"));
+
+                f_loading.setVisibility(View.GONE);
+                b_next.setVisibility(View.GONE);
+                b_restart.setVisibility(View.GONE);
+                t_loading.setVisibility(View.VISIBLE);
+                t_loading.setText("잠시만 기다려주세요.");
+
                 record_start.setVisibility(View.VISIBLE);
                 record_stop.setVisibility(View.GONE);
 
@@ -181,80 +208,92 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
                     File file = new File(recordFile);
 
                     API_Connect api_connect = new API_Connect();
-                    Log.d("여기에서 오류가 날까요..", item.getKeywordIdx());
+
                     api_connect.connect(context, "2", file, item.getKeywordIdx(), new Result_Interface() {
 
                         @Override
                         public void success(Result_Class result) {
+                            String status = result.getStatus();
+                            Log.d("e_status", status);
 
+                            behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                             record_start.setOnClickListener(null);
-
                             result_temp = result;
+                            if(status.equals("ok")) {
+                                if (result_temp.getKeyword().equals("in")) {
+                                    for (int i = 0; i < result_temp.getWordsScore_size(); i++) {
 
-                            if (result_temp.getKeyword().equals("in")) {
-                                for (int i = 0; i < result_temp.getWordsScore_size(); i++) {
-
-                                    LayoutInflater layoutInflater = LayoutInflater.from(context);
-                                    temp = layoutInflater.inflate(R.layout.layout_three_score, null, false);
-
-
-                                    TextView score = temp.findViewById(R.id.score);
-                                    TextView type = temp.findViewById(R.id.type);
-
-                                    int sss = (int) Math.floor(result_temp.getWordsScore(i).getScore());
-                                    String ttt = result_temp.getWordsScore(i).getType();
-
-                                    score.setText(Integer.toString(sss));
-                                    type.setText(ttt);
-
-                                    TextView word = temp.findViewById(R.id.word);
-                                    String www = result_temp.getWordsScore(i).getWord();
-                                    word.setText(www);
+                                        LayoutInflater layoutInflater = LayoutInflater.from(context);
+                                        temp = layoutInflater.inflate(R.layout.layout_three_score, null, false);
 
 
-                                    result_add.addView(temp);
+                                        TextView score = temp.findViewById(R.id.score);
+                                        TextView type = temp.findViewById(R.id.type);
+
+                                        int sss = (int) Math.floor(result_temp.getWordsScore(i).getScore());
+                                        String ttt = result_temp.getWordsScore(i).getType();
+
+                                        score.setText(Integer.toString(sss));
+                                        type.setText(ttt);
+
+                                        TextView word = temp.findViewById(R.id.word);
+                                        String www = result_temp.getWordsScore(i).getWord();
+                                        word.setText(www);
+
+                                        result_add.addView(temp);
+                                    }
                                 }
-                            }
 
-                            String keyword = result.getKeyword();
+                                String keyword = result.getKeyword();
 
-                            int p_score = (int) Math.floor(result.getTotal_score().getPron_score());
-                            if (p_score >= 70 && keyword.equals("in")) {
-                                new ResultBottomSheet(behavior, activity);
-                                sheet_text.setText("☑   훌륭해요 !");
-                                result_sheet.setBackgroundColor(Color.rgb(82, 206, 214));
+                                int p_score = (int) Math.floor(result.getTotal_score().getPron_score());
+                                if (p_score >= 70 && keyword.equals("in")) {
+                                    new ResultBottomSheet(behavior, activity);
+                                    sheet_text.setText("☑   훌륭해요 !");
+                                    result_sheet.setBackgroundColor(Color.rgb(82, 206, 214));
 
-                                b_next.setVisibility(View.VISIBLE); // 다음 문제로 넘어가기
-                                b_restart.setVisibility(View.GONE);
+                                    f_loading.setVisibility(View.VISIBLE);
+                                    b_next.setVisibility(View.VISIBLE); // 다음 문제로 넘어가기
+                                    b_restart.setVisibility(View.GONE);
 
-                                l_restart.setVisibility(View.VISIBLE); // 다시 시도하기
-                                l_next.setVisibility(View.GONE);
+                                    l_restart.setVisibility(View.VISIBLE); // 다시 시도하기
+                                    l_next.setVisibility(View.GONE);
 
 
-                            }else if ( p_score <70 && p_score >=40 && keyword.equals("in")){
-                                sheet_text.setText("☑   다시 시도해볼까요?");
-                                result_sheet.setBackgroundColor(Color.rgb(255, 187, 40));
-                                b_next.setVisibility(View.GONE); // 다음 문제로 넘어가기
-                                b_restart.setVisibility(View.VISIBLE);
-                                l_restart.setVisibility(View.GONE); // 다시 시도하기
-                                l_next.setVisibility(View.VISIBLE);
-                                new ResultBottomSheet(behavior, activity);
+                                } else if (p_score < 70 && p_score >= 40 && keyword.equals("in")) {
+                                    sheet_text.setText("☑   다시 시도해볼까요?");
+                                    result_sheet.setBackgroundColor(Color.rgb(255, 187, 40));
 
-                            }else if ( p_score < 40 || keyword.equals("notin")){
-                                sheet_text.setText("☑   아쉬워요!");
-                                result_sheet.setBackgroundColor(Color.rgb(245, 95, 95));
-                                b_next.setVisibility(View.GONE); // 다음 문제로 넘어가기
-                                b_restart.setVisibility(View.VISIBLE);
-                                l_restart.setVisibility(View.GONE); // 다시 시도하기
-                                l_next.setVisibility(View.VISIBLE);
-                                new ResultBottomSheet(behavior, activity);
+                                    f_loading.setVisibility(View.VISIBLE);
+                                    b_next.setVisibility(View.GONE); // 다음 문제로 넘어가기
+                                    b_restart.setVisibility(View.VISIBLE);
+                                    l_restart.setVisibility(View.GONE); // 다시 시도하기
+                                    l_next.setVisibility(View.VISIBLE);
+                                    new ResultBottomSheet(behavior, activity);
+
+                                } else if (p_score < 40 || keyword.equals("notin")) {
+                                    sheet_text.setText("☑   아쉬워요!");
+                                    result_sheet.setBackgroundColor(Color.rgb(245, 95, 95));
+
+                                    f_loading.setVisibility(View.VISIBLE);
+                                    b_next.setVisibility(View.GONE); // 다음 문제로 넘어가기
+                                    b_restart.setVisibility(View.VISIBLE);
+                                    l_restart.setVisibility(View.GONE); // 다시 시도하기
+                                    l_next.setVisibility(View.VISIBLE);
+                                    new ResultBottomSheet(behavior, activity);
+                                }
+                            }else if(status.equals("error")){
+                                Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                             }
 
                         }
                         @Override
                         public void failure(Throwable t) {
                             // Display error
-                            Log.d("error", "result_interface error");
+                            behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                            Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                            Log.d("error", "api connect error");
+
                         }
 
                     });
@@ -312,11 +351,10 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
 
             }else if( page == size-1){
 
-
                 resultList.add(result_temp);
                 behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
                 // 결과 페이지로 넘어가기
-                Log.d("error", "here");
                 Intent intent = new Intent(getApplicationContext(), ScoreActivity.class);
                 intent.putExtra("situation", getSituation);
                 intent.putExtra("chapter",getChapter);
@@ -334,8 +372,6 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
             for(int i = 0; i < child; i++){
                 result_add.removeView(result_add.getChildAt(0));
             }
-
-
 
         }
 

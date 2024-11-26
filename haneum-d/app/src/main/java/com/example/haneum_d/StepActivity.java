@@ -13,6 +13,7 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class StepActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onCreate(Bundle savedInstanceState){
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
 
@@ -36,14 +38,13 @@ public class StepActivity extends AppCompatActivity implements View.OnClickListe
 
         /* 부분 Bold 처리 */
         TextView textview1 = findViewById(R.id.textview1);
-        Log.d("situation", getSituation);
 
-        if (getSituation.equals("chapter1")) {
+        if (getChapter.equals("chapter1")) {
 
-            text1 = getSituation + "에서 " + getChapter + "을 선택하셨군요.\n그럼 학습해볼까요?";
+            text1 = "[ " + getSituation + " : " + getChapter + " ] 을 선택하셨군요.\n그럼 학습해볼까요?";
             part1 = "학습해볼까요?";
         }else {
-            text1 = getSituation + "에서 " + getChapter + "를 선택하셨군요.\n그럼 학습해볼까요?";
+            text1 = "[ " + getSituation + " : " + getChapter + " ] 를 선택하셨군요.\n그럼 학습해볼까요?";
             part1 = "학습해볼까요?";
         }
 

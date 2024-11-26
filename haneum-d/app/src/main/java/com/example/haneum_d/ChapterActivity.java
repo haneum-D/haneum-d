@@ -1,6 +1,5 @@
 package com.example.haneum_d;
 
-import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -10,17 +9,13 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class ChapterActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
@@ -31,6 +26,7 @@ public class ChapterActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chapter);
 
@@ -38,8 +34,8 @@ public class ChapterActivity extends AppCompatActivity implements View.OnClickLi
 
         /* 부분 Bold 처리 */
         TextView textview1 = findViewById(R.id.textview1);
-        String text1 = getSituation + "주제를 통해\n한국어를 공부해봅시다.";
-        String part1 = getSituation + "주제를 통해";
+        String text1 = "[ " + getSituation + " ] 주제를 통해\n한국어를 공부해봅시다.";
+        String part1 = "[ " + getSituation + " ] 주제를 통해";
 
         int start = text1.indexOf(part1);
         int end = start + part1.length();
@@ -120,6 +116,7 @@ public class ChapterActivity extends AppCompatActivity implements View.OnClickLi
         }else if(v == chapter4){
             temp_text = chap4_text;
         }
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             temp_text.setTextColor(Color.rgb(255, 255, 255));
         } else if (event.getAction() == MotionEvent.ACTION_UP) {

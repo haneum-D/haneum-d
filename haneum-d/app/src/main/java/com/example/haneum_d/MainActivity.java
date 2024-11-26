@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     LinearLayout situation1, situation2, situation3, situation4, situation5, situation6;
     TextView situ1_text, situ2_text, situ3_text, situ4_text, situ5_text, situ6_text;
-
     DBHelper dbHelper;
     SQLiteDatabase db_write;
 
@@ -60,42 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dbHelper = new DBHelper(this);
         db_write = dbHelper.getWritableDatabase();
 
-        //TOPIC , CHAPTER , STEP_NUM, TEXT_IDX , SENTENCE_A, AUDIOFILE_STR, RECORDFILE_STR, SENTENCE_Q, SUB_TOPIC, KEYWWORD_IDX
-        // 대학생활, K-문화, K-음식, 지역관광, 취업면접, 병원가기 : chapter1 ~ 4
 
-        // step1 example : "1", "1,0,0", "학교", "1_0_0_audio.wav", filepath + "/1_0_0_record"
-        /*
-        ContentValues values = new ContentValues();
-        values.put(ContentsInfo.COLUMN_TOPIC, "대학생활");
-        values.put(ContentsInfo.COLUMN_CHAPTER, "chapter1");
-        values.put(ContentsInfo.COLUMN_STEP_NUM, "1");
-        values.put(ContentsInfo.COLUMN_TEXT_IDX, "1,0,0");
-        values.put(ContentsInfo.COLUMN_SENTENCE_A, "학교");
-        values.put(ContentsInfo.COLUMN_AUDIOFILE_STR, "1_0_0_audio.mp3");
-        values.put(ContentsInfo.COLUMN_RECORDFILE_STR, "/1_0_0_record");
-        */
-
-        /*
-        values.put(ContentsInfo.COLUMN_TOPIC, "a");
-        values.put(ContentsInfo.COLUMN_CHAPTER, "b");
-        values.put(ContentsInfo.COLUMN_STEP_NUM, "c");
-        values.put(ContentsInfo.COLUMN_TEXT_IDX, "d");
-        values.put(ContentsInfo.COLUMN_SENTENCE_A, "e");
-        values.put(ContentsInfo.COLUMN_AUDIOFILE_STR, "f");
-        values.put(ContentsInfo.COLUMN_RECORDFILE_STR, "g");
-        values.put(ContentsInfo.COLUMN_SENTENCE_Q, "h"); // step2 ~ 3
-        values.put(ContentsInfo.COLUMN_SUB_TOPIC, "i"); // step2 ~ 3
-        values.put(ContentsInfo.COLUMN_KEYWORD_IDX, "j"); // step3
-
-
-        long insertRow = db_write.insert(ContentsInfo.TABLE_NAME, null, values);
-        if(insertRow == -1){
-            Log.d("DB DATA 추가", "X");
-        }else{
-            Log.d("DB DATA 추가", "O");
-        }
-        db_write.close();
-        */
         /* 권한 요청 */ // Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,
         ActivityCompat.requestPermissions(this , new String[]{ Manifest.permission.RECORD_AUDIO},0);
 
@@ -105,29 +69,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayShowTitleEnabled((false));
 
         Resources resource = getResources();
+
         int status_bar_id = 0;
         int navigation_bar_id = 0;
 
-        int status_bar_h = 0;
-        int navigation_bar_h = 0;
+//        int status_bar_h = 0;
+//        int navigation_bar_h = 0;
 
 
         status_bar_id = resource.getIdentifier("status_bar_height", "dimen", "android");
         navigation_bar_id = resource.getIdentifier("navigation_bar_height", "dimen", "android");
 
-        if (status_bar_id != 0){
-            status_bar_h = resource.getDimensionPixelSize(status_bar_id);
-        }
+//        if (status_bar_id != 0){
+//            status_bar_h = resource.getDimensionPixelSize(status_bar_id);
+//        }
+//
+//        if(navigation_bar_id !=0){
+//            navigation_bar_h = resource.getDimensionPixelSize(navigation_bar_id);
+//        }
 
-        if(navigation_bar_id !=0){
-            navigation_bar_h = resource.getDimensionPixelSize(navigation_bar_id);
-        }
+//        LinearLayout inner = findViewById(R.id.inner);
+//        inner.setPadding(0,
+//                status_bar_h,
+//                0,
+//                navigation_bar_h);
 
         LinearLayout inner = findViewById(R.id.inner);
         inner.setPadding(0,
-                status_bar_h,
+                resource.getDimensionPixelSize(status_bar_id),
                 0,
-                navigation_bar_h);
+                resource.getDimensionPixelSize(navigation_bar_id));
 
         /* 상황 선택 및 Text 설정 */
         situation1 = findViewById(R.id.situation1);
@@ -135,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation1.setOnTouchListener(this);
 
         situ1_text = situation1.findViewById(R.id.situation_text);
-        situ1_text.setText("대학\n생활");
+        situ1_text.setText("대학생활");
 
         /* ----------------------------------------------------*/
         situation2 = findViewById(R.id.situation2);
@@ -159,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation4.setOnTouchListener(this);
 
         situ4_text = situation4.findViewById(R.id.situation_text);
-        situ4_text.setText("지역\n관광");
+        situ4_text.setText("지역관광");
 
         /* ----------------------------------------------------*/
         situation5 = findViewById(R.id.situation5);
@@ -167,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation5.setOnTouchListener(this);
 
         situ5_text = situation5.findViewById(R.id.situation_text);
-        situ5_text.setText("취업\n면접");
+        situ5_text.setText("취업면접");
 
         /* ----------------------------------------------------*/
         situation6 = findViewById(R.id.situation6);
@@ -175,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         situation6.setOnTouchListener(this);
 
         situ6_text = situation6.findViewById(R.id.situation_text);
-        situ6_text.setText("병원\n가기");
+        situ6_text.setText("병원가기");
 
 
     }

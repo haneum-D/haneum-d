@@ -11,8 +11,8 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="60dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="70dp"
         android:src="@drawable/cha1"/>
 
     <TextView
@@ -20,19 +20,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="25dp"
         android:layout_marginBottom="10dp"
-        android:textSize="24dp"/>
+        android:textSize="20dp"/>
 
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:textAlignment="center"
-        android:text="의료 분야의 주제별 학습이 준비되어 있어요.\n연습하고 싶은 주제를 선택해 봅시다."
-        android:textSize="17dp"/>
 
     <View
         android:layout_width="match_parent"

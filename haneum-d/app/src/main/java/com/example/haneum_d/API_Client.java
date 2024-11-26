@@ -14,16 +14,16 @@ public class API_Client {
 
 
     private static OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .writeTimeout(20, TimeUnit.SECONDS)
             .build();
 
 
     static Retrofit getClient() {
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://223.130.161.17:2000/")
+                .baseUrl(BuildConfig.API_URL) // local.properties
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -31,3 +31,4 @@ public class API_Client {
         return retrofit;
     }
 }
+
